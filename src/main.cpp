@@ -47,8 +47,20 @@ void printGrafo(const Grafo& G) {
     cout << endl;
 }
 
+// Imprime la solucion por stdout con formato
+// maximo impacto
+// colores de los vertices
+void printSolucion(const Solucion& s) {
+    cout << s.impacto << endl;
+    for(int i = 1; i < s.coloreo.size(); i++) {
+        cout << s.coloreo[i] << " ";
+    }
+    cout << endl;
+}
+
 int main (int argc, char** argv) {
     map<string, string> algorithms = {
+        {"C", "Control"},
 		{"G1", "Goloso 1"},
         {"G2", "Goloso 2"},
         {"TS1", "Tabú search basado en soluciones"},
@@ -72,13 +84,14 @@ int main (int argc, char** argv) {
 
     // Leemos el input
     Instancia I = leerGrafos();
-    printGrafo(I.G);
-    printGrafo(I.H);
+    //printGrafo(I.G);
+    //printGrafo(I.H);
 
 
     auto start = chrono::steady_clock::now();
 
     // Principal
+    Solucion s;
     if (algorithm == "G1") {
         cout << algorithm << endl;
     } else if (algorithm == "G2") {
@@ -87,12 +100,17 @@ int main (int argc, char** argv) {
         cout << algorithm << endl;
     } else if (algorithm == "TS2") {
         cout << algorithm << endl;
+    } else if (algorithm == "C") {
+        s = pcmiConstructivaControl(I);
     }
 
     auto end = chrono::steady_clock::now();
 	double total_time = chrono::duration<double, milli>(end - start).count();    
     // Imprimimos el tiempo de ejecucion por stderr
     clog << total_time << endl;
+
+    // Imprimimos la solucion
+    printSolucion(s);
 
     return 0;
 } 

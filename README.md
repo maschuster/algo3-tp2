@@ -40,4 +40,48 @@ Un coloreo valido es solucion factible. Te interesa maximizar el impacto
 
 ### Taboh search
 
-tabuh sech
+taboh sech
+
+Pseudocodigo
+
+```text
+busquedaLocal()
+  in: ...
+  out: ...
+
+  s = inicial(G)
+  while existe s' \in N(s) con f(s') < f(s)
+    elegir s'
+  
+  return s
+```
+
+- Criterio de parada: iteraciones
+- Vecindad
+  - cantidad de elementos a considerar
+- Memoria
+  - estructura
+  - solucion
+- Tal vez funcion de aspiracion
+
+Pseudocodigo:
+
+```python
+tabuSearch(G: grafo, t: int):
+  sol = solucionInicial(g)
+  best = sol
+  memoria = iniciarMemoria(maxSize=t)
+
+  while criterio de parada:
+    # obtener la vecindad
+    vecinos = neighbors(sol)
+
+    # el mejor sin contar los ya vistos
+    sol = mejor(vecinos, memoria)
+
+    memoria.recordar(sol)
+    if costo(s) < costo(best):
+      best = sol
+  
+  return s
+```
