@@ -17,8 +17,9 @@ def read_output(out: str) -> (int, List[int]):
 class TestNPM(unittest.TestCase):
     """Tests para NPM. Todos asumen que ya esta buildeado"""
 
-    def test_control(self):
+    def tests(self):
         tests = [
+            # control
             {
                 "name": "control facil",
                 "algoritmo": "C",
@@ -32,13 +33,22 @@ class TestNPM(unittest.TestCase):
                 "instancia": "CMI_n16",
                 "impacto": 0,
                 "coloreo": list(range(1, 17)),
-            }
+            },
+
+            # wyrna
+            {
+                "name": "wyrna",
+                "algoritmo": "W",
+                "instancia": "CMI_n6",
+                "impacto": 1,
+                "coloreo": [8, 2, 10, 2, 12, 13],
+            },
         ]
 
         for test in tests:
             with self.subTest(test["name"]):
-                filename = f"../instancias/{test['instancia']}.in"
-                res = subprocess.run(f"../build/main {test['algoritmo']} < {filename}", shell=True, capture_output=True)
+                filename = f"instancias/{test['instancia']}.in"
+                res = subprocess.run(f"build/main {test['algoritmo']} < {filename}", shell=True, capture_output=True)
 
                 impacto, coloreo = read_output(res.stdout.rstrip().decode("utf-8"))
                 assert impacto == test["impacto"], f"want: {test['impacto']}, got: {impacto}"

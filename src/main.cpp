@@ -61,7 +61,7 @@ void printSolucion(const Solucion& s) {
 int main (int argc, char** argv) {
     map<string, string> algorithms = {
         {"C", "Control"},
-		{"G1", "Goloso 1"},
+		{"W", "Wyrnistica"},
         {"G2", "Goloso 2"},
         {"TS1", "Tabú search basado en soluciones"},
 		{"TS2", "Tabú search basado en estructura (vértices)"},
@@ -92,8 +92,8 @@ int main (int argc, char** argv) {
 
     // Principal
     Solucion s;
-    if (algorithm == "G1") {
-        cout << algorithm << endl;
+    if (algorithm == "W") {
+        s = wyrnisticaDiferencialGolosa(I);
     } else if (algorithm == "G2") {
         cout << algorithm << endl;
     } else if (algorithm == "TS1") {
