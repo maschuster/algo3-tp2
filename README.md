@@ -59,9 +59,15 @@ busquedaLocal()
 - Criterio de parada: iteraciones
 - Vecindad
   - cantidad de elementos a considerar
+  - cambiar el color de un vertice a uno que ya se use, pero que no lleve a un
+    coloreo invalido.
+    - La vecindad de las soluciones tiene <= colores
+  - incrementar cantidad de colores
 - Memoria
-  - estructura
+  - estructura.
+    - (vertice, color) {vertice <- color}
   - solucion
+    - representacion del coloreo
 - Tal vez funcion de aspiracion
 
 Pseudocodigo:
@@ -83,5 +89,5 @@ tabuSearch(G: grafo, t: int):
     if costo(s) < costo(best):
       best = sol
   
-  return s
+  return sol
 ```

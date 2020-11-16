@@ -99,7 +99,7 @@ int main (int argc, char** argv) {
     } else if (algorithm == "TS1") {
         cout << algorithm << endl;
     } else if (algorithm == "TS2") {
-        cout << algorithm << endl;
+        s = tabuEstructura(I, 100, 1000);
     } else if (algorithm == "C") {
         s = pcmiConstructivaControl(I);
     }
