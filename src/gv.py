@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 """gv - Graph Viewer
 
 Permite ver grafos.
@@ -57,7 +59,8 @@ def view(graph, color):
         palette="pastel",
         n_colors=len(coloreo)+1,
     )
-    coloreo = list(map(lambda c: matplotlib.colors.rgb2hex(palette[c]), coloreo))
+    colorDict = dict(zip(set(coloreo), range(len(set(coloreo)))))
+    coloreo = list(map(lambda c: matplotlib.colors.rgb2hex(palette[c]), [colorDict[x] for x in coloreo]))
     options = {
         "font_size": 10,
         "node_size": 1000,
