@@ -62,7 +62,7 @@ def view(graph, color):
         "font_size": 10,
         "node_size": 1000,
         "node_color": coloreo,
-        "pos": nx.circular_layout(G),
+        "pos": nx.spring_layout(G),
         "edgecolors": "black",
         "linewidths": 3,
         "width": 4,
