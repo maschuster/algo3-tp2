@@ -63,8 +63,8 @@ int main (int argc, char** argv) {
         {"C", "Control"},
 		{"W", "Wyrnistica"},
         {"G2", "Goloso 2"},
-        {"TS1", "Tabú search basado en soluciones"},
-		{"TS2", "Tabú search basado en estructura (vértices)"},
+        {"TS-C", "Tabú search con memoria basada en coloreos"},
+		{"TS-E", "Tabú search con memoria basada en estructura (vértices)"},
 	};
 
     // Leo el argumento que indica el algoritmo. Tiene que haber al menos dos
@@ -96,9 +96,10 @@ int main (int argc, char** argv) {
         s = wyrnisticaDiferencialGolosa(I);
     } else if (algorithm == "G2") {
         cout << algorithm << endl;
-    } else if (algorithm == "TS1") {
-        cout << algorithm << endl;
-    } else if (algorithm == "TS2") {
+    } else if (algorithm == "TS-C") {
+        s = tabuColoreo(I, 100, 1000);
+    } else if (algorithm == "TS-E") {
+        // TODO: parametrizar tamaño de memoria e iteraciones
         s = tabuEstructura(I, 100, 1000);
     } else if (algorithm == "C") {
         s = pcmiConstructivaControl(I);

@@ -205,7 +205,7 @@ vector<Vecino> vecinos(const Instancia& I, const Solucion& sol) {
 // Dado un vector de vecinos, devuelve los que no son tabu (i.e los que no estan
 // en memoria), opcionalmente aspirando si el impacto generado es mayor al
 // maximo actual.
-vector<Vecino> noTabu(vector<Vecino> vecinos, CircularVector<CambioEstructural> mem, bool aspirar, int maxActual) {
+vector<Vecino> noTabuEstructura(vector<Vecino> vecinos, CircularVector<CambioEstructural> mem, bool aspirar, int maxActual) {
     vector<Vecino> factibles;
 
     for(Vecino v : vecinos) {
@@ -217,6 +217,24 @@ vector<Vecino> noTabu(vector<Vecino> vecinos, CircularVector<CambioEstructural> 
                 factibles.push_back(v);
             }
         } else {
+            factibles.push_back(v);
+        }
+    }
+
+    return factibles;
+}
+
+// Dado un vector de vecinos, devuelve los que no son tabu (i.e los que no estan
+// en memoria), opcionalmente aspirando si el impacto generado es mayor al
+// maximo actual.
+vector<Vecino> noTabuColoreo(vector<Vecino> vecinos, CircularVector<Coloreo> mem) {
+    vector<Vecino> factibles;
+
+    for(Vecino v : vecinos) {
+        // Nota: No tiene sentido aspirar para la memoria de soluciones, ya que
+        // una solucion que esta en la memoria nunca sera mejor porque ya fue
+        // vista y contemplada en su totalidad.
+        if (!mem.contains(v.sol.coloreo)) {
             factibles.push_back(v);
         }
     }
@@ -236,7 +254,7 @@ Vecino mejor(vector<Vecino> vecinos) {
     return mejor;
 }
 
-// Tabu search
+// Tabu search con memoria de estructura
 Solucion tabuEstructura(const Instancia& I, int memorySize, int iterations) {
     // Obtenemos la solución inicial a partir de una constructiva golosa
     // TODO: cambiar con la experimentalmente mejor
@@ -249,7 +267,7 @@ Solucion tabuEstructura(const Instancia& I, int memorySize, int iterations) {
     for(int i = 0; i < iterations; i++) {
         // Buscamos las soluciones vecinas y nos quedamos con las que no sean
         // tabu.
-        vector<Vecino> vecindad = noTabu(
+        vector<Vecino> vecindad = noTabuEstructura(
             vecinos(I, sol),
             memoria,
             false,          // Aspiracion
@@ -278,3 +296,40 @@ Solucion tabuEstructura(const Instancia& I, int memorySize, int iterations) {
 }
 
 // Aspiracion
+// TODO
+
+// Tabu seach con memoria de coloreos
+Solucion tabuColoreo(const Instancia& I, int memorySize, int iterations) {
+    // Obtenemos la solución inicial a partir de una constructiva golosa
+    // TODO: cambiar con la experimentalmente mejor
+    Solucion sol = wyrnisticaDiferencialGolosa(I);
+    Solucion best = sol;
+
+    // Inicializamos la memoria de tamaño fijo
+    auto memoria = CircularVector<Coloreo>(memorySize);
+
+    for(int i = 0; i < iterations; i++) {
+        // Buscamos las soluciones vecinas y nos quedamos con las que no sean
+        // tabu.
+        vector<Vecino> vecindad = noTabuColoreo(vecinos(I, sol), memoria);
+
+        if(vecindad.empty()) {
+            // Si no tenemos vecindad, no hay por donde seguir explorando.
+            break;
+        }
+
+        // Nos quedamos con la mejor
+        Vecino vecino = mejor(vecindad);
+        sol = vecino.sol;
+
+        // Almacenamos el coloreo encontrado para no repetirlo
+        memoria.push_back(vecino.sol.coloreo);
+
+        // La marcamos como nueva mejor si lo es
+        if (best.impacto < sol.impacto) {
+            best = sol;
+        }
+    }
+
+    return sol;
+}
