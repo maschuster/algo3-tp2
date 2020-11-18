@@ -102,10 +102,9 @@ Solucion wyrnisticaDiferencialGolosa(const Instancia& I) {
     // incidencia.
     MatrizAdyacencia MatG = listaAMatDeAdyacencia(I.G);
     for (Vertice v = 1; v < I.H.size(); v++) {
-        // Si v esta coloreado, continuo
-        if (coloreo[v] != UNDEFINED) continue;
+        for (int i = 1; i < I.H[v].size() && coloreo[v] == UNDEFINED; i++) {
+            Vertice w = I.H[v][i];
 
-        for (Vertice w : I.H[v]) {
             // Si (v, w) \in G, no pueden tener el mismo color porque no seria
             // un coloreo valido
             if (MatG[v][w]) continue;
@@ -117,9 +116,71 @@ Solucion wyrnisticaDiferencialGolosa(const Instancia& I) {
             int color = min(v, w);
             coloreo[w] = color;
             coloreo[v] = color;
-            break;
         }
 
+    }
+
+    // 3. Rellenar el resto con colores distintos a partir de n+1
+    //    No se va a pisar, ya que como usamos el numero de cada vertice como
+    //    color, a lo sumo es n.
+    for(int v = 1; v < coloreo.size(); v++) {
+        if (coloreo[v] == UNDEFINED) coloreo[v] = coloreo.size() + v;
+    }
+
+    return Solucion {
+        .coloreo = coloreo,
+        .impacto = calcularImpacto(I, coloreo),
+    };
+}
+
+
+// Retorna si el vertice v tiene un vecino en G con color c.
+bool tieneVecinoConColor(Grafo G, Vertice v, Coloreo coloreo, Color c) {
+    for (Vertice u : G[v]) {
+        if (coloreo[u] == c) {
+            // Tiene
+            return true;
+        }
+    }
+
+    // No tiene
+    return false;
+}
+
+// Algoritmo Wyrnower - Wyrna Power. Con chequeo de colores.
+// La diferencia principal con el algoritmo Wyrna es que cuando se encuentra con
+// un vertice vecino que ya esta coloreado, en vez de saltearlo, se fija si
+// puede tomar el mismo color chequeando que no tenga otro con él en su
+// vecindad.
+// O(m_H + m_G + n)
+Solucion wyrnowerGolosa(const Instancia& I) {
+    // 1. Buscar W (wyrna) = H - G, las aristas de H que no estan en G
+    // 2. Pintar u y v tq (u, v) \in W del mismo color
+    Coloreo coloreo(I.G.size(), UNDEFINED);
+
+    // Transformamos la representacion de lista de adyacencia a matriz de
+    // incidencia.
+    MatrizAdyacencia MatG = listaAMatDeAdyacencia(I.G);
+    for (Vertice v = 1; v < I.H.size(); v++) {
+        for (int i = 1; i < I.H[v].size() && coloreo[v] == UNDEFINED; i++) {
+            Vertice w = I.H[v][i];
+            // Si (v, w) \in G, no pueden tener el mismo color porque no seria
+            // un coloreo valido
+            if (MatG[v][w]) continue;
+
+            // Si w tiene color, le queremos asignar a v el mismo pero para eso
+            // no se tiene que usar en su vecindad.
+            if (coloreo[w] != UNDEFINED) {
+                if (!tieneVecinoConColor(I.G, v, coloreo, coloreo[w])) {
+                    coloreo[v] = coloreo[w];
+                }
+            } else {
+                // Les asignamos a ambos el color del minimo
+                int color = min(v, w);
+                coloreo[w] = color;
+                coloreo[v] = color;
+            }
+        }
     }
 
     // 3. Rellenar el resto con colores distintos a partir de n+1

@@ -62,7 +62,7 @@ int main (int argc, char** argv) {
     map<string, string> algorithms = {
         {"C", "Control"},
 		{"W", "Wyrnistica"},
-        {"G2", "Goloso 2"},
+        {"WP", "Wyrnower - Wyrna Power"},
         {"TS-C", "Tabú search con memoria basada en coloreos"},
 		{"TS-E", "Tabú search con memoria basada en estructura (vértices)"},
 	};
@@ -94,8 +94,8 @@ int main (int argc, char** argv) {
     Solucion s;
     if (algorithm == "W") {
         s = wyrnisticaDiferencialGolosa(I);
-    } else if (algorithm == "G2") {
-        cout << algorithm << endl;
+    } else if (algorithm == "WP") {
+        s = wyrnowerGolosa(I);
     } else if (algorithm == "TS-C") {
         s = tabuColoreo(I, 100, 1000);
     } else if (algorithm == "TS-E") {
