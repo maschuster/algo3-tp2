@@ -3,16 +3,10 @@
 import os
 import unittest
 import subprocess
+import pcmi
 
 from typing import List
 
-def read_output(out: str) -> (int, List[int]):
-    """Lee un output del programa, por ej.
-        1 
-        4 1 6 1 4 3 
-    """
-    sout = out.split("\n")
-    return int(sout[0]), list(map(int, sout[1].rstrip().split(" ")))
 
 class TestNPM(unittest.TestCase):
     """Tests para NPM. Todos asumen que ya esta buildeado"""
@@ -47,10 +41,8 @@ class TestNPM(unittest.TestCase):
 
         for test in tests:
             with self.subTest(test["name"]):
-                filename = f"instancias/{test['instancia']}.in"
-                res = subprocess.run(f"build/main {test['algoritmo']} < {filename}", shell=True, capture_output=True)
-
-                impacto, coloreo = read_output(res.stdout.rstrip().decode("utf-8"))
+                res, _ = pcmi.run(test["algoritmo"], f"../instancias/{test['instancia']}.in")
+                impacto, coloreo = res
                 assert impacto == test["impacto"], f"want: {test['impacto']}, got: {impacto}"
                 assert coloreo == test["coloreo"], f"want: {test['coloreo']}, got: {coloreo}"
                 #assert  == output(test), f"falló el test {test} en el algoritmo {test['algoritmo']}"

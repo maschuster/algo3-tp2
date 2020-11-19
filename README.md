@@ -91,3 +91,46 @@ tabuSearch(G: grafo, t: int):
   
   return sol
 ```
+
+## Experimentos
+
+### Visualizaciones
+
+- Impacto en cada iteracion (para ver como evoluciona, si sale de max. locales)
+
+Para visualizar el recorrido del algoritmo (extra: comparar con uno que se quede
+en locales, como hill climber):
+
+- Guardar en cada iteracion el coloreo que fue el maximo junto con el impacto
+- Calcular una mat. de distancias entre todos los coloreos
+- Graficarlos en 3d. (magia)
+
+### Exp 1
+
+- Probar los dos golosos y la random (control) solos para todos
+  - eficiencia
+  - tiempo
+- Usar con ambas tabu search
+  - ver si se come todo o se nota la diferencia
+  - Gap por iteraciones
+
+### Exp 2
+
+Optimizar meta-parametros de tabu search
+
+- Cantidad de vecindad que se considera
+- Iteraciones
+- Tamaño memoria
+- Aspirar
+
+Usar metaheuristicas para establecerlos, por ejemplo hillclimber
+
+### Exp 3
+
+Tabu, solo achicar numero de colores para vecindad te limita, buscar otra forma
+que no lo haga y ver si es mejor.
+
+### Exp 4
+
+- Elegir el mejor de cada uno y correrlo para nuevas, comparando eficiencia y
+  tiempo de ejecucion.
