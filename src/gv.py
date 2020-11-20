@@ -23,19 +23,19 @@ def cli():
 
 # https://networkx.org/documentation/stable/_modules/networkx/drawing/layout.html
 LAYOUTS = {
-    "bipartite": nx.bipartite_layout,
+    #"bipartite": nx.bipartite_layout,
     "circular": nx.circular_layout,
     "kamada": nx.kamada_kawai_layout,
     "random": nx.random_layout,
-    "rescale": nx.rescale_layout,
-    "rescale_dict": nx.rescale_layout_dict,
+    #"rescale": nx.rescale_layout,
+    #"rescale_dict": nx.rescale_layout_dict,
     "shell": nx.shell_layout,
     "spring": nx.spring_layout,
     "spectral": nx.spectral_layout,
     "planar": nx.planar_layout,
     "fruchterman": nx.fruchterman_reingold_layout,
     "spiral": nx.spiral_layout,
-    "multipartite": nx.multipartite_layout,
+    #"multipartite": nx.multipartite_layout,
 }
 
 @cli.command()
@@ -85,10 +85,11 @@ def view(graph, color, layout, optimum):
         "font_size": 10,
         "node_size": 1000,
         "node_color": coloreo,
-        "pos": LAYOUTS[layout](G),
+        # componiendo ambos logramos un layout que contempla todas las aristas.
+        "pos": LAYOUTS[layout](nx.compose(G,H)),
         "edgecolors": "black",
-        "linewidths": 3,
-        "width": 4,
+        "linewidths": 2,
+        "width": 3,
     }
 
     

@@ -3,7 +3,7 @@ all: src/main.cpp src/algoritmos.cpp
 	g++ -o build/main src/main.cpp -O2 -std=c++14
 
 test:
-	python3.7 tests/tests.py
+	cd notebooks && python3.7 tests.py
 
 clean:
 	rm build/main
