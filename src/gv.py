@@ -21,10 +21,29 @@ def cli():
     """gv es un programa para visualizar grafos coloreados."""
     pass
 
+# https://networkx.org/documentation/stable/_modules/networkx/drawing/layout.html
+LAYOUTS = {
+    "bipartite": nx.bipartite_layout,
+    "circular": nx.circular_layout,
+    "kamada": nx.kamada_kawai_layout,
+    "random": nx.random_layout,
+    "rescale": nx.rescale_layout,
+    "rescale_dict": nx.rescale_layout_dict,
+    "shell": nx.shell_layout,
+    "spring": nx.spring_layout,
+    "spectral": nx.spectral_layout,
+    "planar": nx.planar_layout,
+    "fruchterman": nx.fruchterman_reingold_layout,
+    "spiral": nx.spiral_layout,
+    "multipartite": nx.multipartite_layout,
+}
+
 @cli.command()
 @click.option("--graph", "-g", type=click.File(mode='r'))
-@click.option("--color", "-c", type=click.File(mode='r')) # -: stdin
-def view(graph, color):
+@click.option("--color", "-c", type=click.File(mode='r'), default="-") # -: stdin
+@click.option("--layout", "-l", type=click.Choice(LAYOUTS.keys(), case_sensitive=True))
+@click.option("--optimum", "-o", type=click.File(mode='r'))
+def view(graph, color, layout, optimum):
     # graph y color son archivos ya abiertos.
     graph = graph.read().split('\n')
     colors = color.read().split('\n')
@@ -53,6 +72,7 @@ def view(graph, color):
     #   maximo impacto
     #   n colores (1 para cada vert) separados por espacio
     impacto = colors[0]
+    optimo = optimum.read().split('\n')[0]
 
     coloreo = list(map(int, colors[1].rstrip().split(" ")))
     palette = sns.color_palette(
@@ -65,7 +85,7 @@ def view(graph, color):
         "font_size": 10,
         "node_size": 1000,
         "node_color": coloreo,
-        "pos": nx.spring_layout(G),
+        "pos": LAYOUTS[layout](G),
         "edgecolors": "black",
         "linewidths": 3,
         "width": 4,
@@ -75,7 +95,7 @@ def view(graph, color):
     fig, axes = plt.subplots(1, 2, figsize=(10,5))
     nx.draw_networkx(G, **options, ax=axes[0])
     nx.draw_networkx(H, **options, ax=axes[1])
-    axes[0].set_title(f"G, impacto: {impacto}")
+    axes[0].set_title(f"G, impacto: {impacto}, optimo: {optimo}")
     axes[1].set_title("H")
 
     for ax in axes:
