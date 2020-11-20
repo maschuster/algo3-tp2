@@ -61,6 +61,7 @@ void printSolucion(const Solucion& s) {
 int main (int argc, char** argv) {
     map<string, string> algorithms = {
         {"C", "Control"},
+        {"S-LF", "Secuencial LF"},
 		{"W", "Wyrnistica"},
         {"WP", "Wyrnower - Wyrna Power"},
         {"TS-C", "Tabú search con memoria basada en coloreos"},
@@ -87,13 +88,14 @@ int main (int argc, char** argv) {
     //printGrafo(I.G);
     //printGrafo(I.H);
 
-
     auto start = chrono::steady_clock::now();
 
     // Principal
     Solucion s;
     if (algorithm == "W") {
         s = wyrnisticaDiferencialGolosa(I);
+    } else if (algorithm == "S-LF") {
+        s = golosaSecuencialLF(I);
     } else if (algorithm == "WP") {
         s = wyrnowerGolosa(I);
     } else if (algorithm == "TS-C") {

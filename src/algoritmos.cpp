@@ -15,6 +15,8 @@ constexpr int UNDEFINED = -1;
 typedef int Vertice;
 typedef vector<vector<Vertice>> Grafo;
 
+typedef int Grado;
+
 // m_ij = (i, j) \in G
 // Basta con bool porque son grafos y no multigrafos.
 typedef vector<vector<bool>> MatrizAdyacencia;
@@ -57,6 +59,20 @@ int calcularImpacto(const Instancia& I, const Coloreo& coloreo) {
     return impacto / 2;
 }
 
+// Retorna si el vertice v tiene un vecino en G con color c.
+// Θ(d_G(v)) = O(m_G)
+bool tieneVecinoConColor(Grafo G, Vertice v, Coloreo coloreo, Color c) {
+    for (Vertice u : G[v]) {
+        if (coloreo[u] == c) {
+            // Tiene
+            return true;
+        }
+    }
+
+    // No tiene
+    return false;
+}
+
 // Golosas
 
 // Le asigna un color diferente a cada vertice, el coloreo trivial.
@@ -70,6 +86,53 @@ Solucion pcmiConstructivaControl(const Instancia& I) {
         .coloreo = coloreo,
         .impacto = calcularImpacto(I, coloreo),
     };
+}
+
+// Funcion de comparacion de pares de vertices y grados
+// Ordena de mayor a menor.
+bool cmp(pair<Grado, Vertice> a, pair<Grado, Vertice> b) { 
+    return (a.first > b.first); 
+}
+
+// Busca un coloreo usando la heurisica secuencial LF (largest first), que
+// ordena los nodos de mayor a menor segun su grado y luego le asigna a cada uno
+// el minimo color que pueda.
+// Busca colorear de forma buena G, pero no le presta atencion a H.
+//
+// Complejidad temporal: O(n^2 * m_G)
+Solucion golosaSecuencialLF(const Instancia& I) {
+    // Ordenamos los vertices segun su grado
+    vector<pair<Grado, Vertice>> vertices;
+
+    // O(n)
+    for(Vertice v = 1; v < I.G.size(); v++) {
+        vertices.push_back(make_pair(I.G[v].size(), v));
+    }
+
+    // O(n lg(n))
+    sort(vertices.begin(), vertices.end(), cmp);
+
+    // Los coloreamos
+    Coloreo coloreo(I.G.size(), UNDEFINED);
+    // O(n^2 m_G)
+    for (pair<Grado, Vertice> p : vertices) {
+        Vertice v = p.second;
+        // Le asignamos el minimo color tal que no tiene un vecino que lo
+        // comparta.
+        // O(n * m_G)
+        for (Color c = 1; c < I.G.size(); c++) {
+            // O(m_G)
+            if (!tieneVecinoConColor(I.G, v, coloreo, c)) {
+                coloreo[v] = c;
+                break;
+            }
+        }
+    }
+
+    return Solucion {
+        .coloreo = coloreo,
+        .impacto = calcularImpacto(I, coloreo), // O(m_H)
+    }; 
 }
 
 // Convierte un grafo representado como lista de adyacencia a una matriz de
@@ -131,20 +194,6 @@ Solucion wyrnisticaDiferencialGolosa(const Instancia& I) {
         .coloreo = coloreo,
         .impacto = calcularImpacto(I, coloreo),
     };
-}
-
-
-// Retorna si el vertice v tiene un vecino en G con color c.
-bool tieneVecinoConColor(Grafo G, Vertice v, Coloreo coloreo, Color c) {
-    for (Vertice u : G[v]) {
-        if (coloreo[u] == c) {
-            // Tiene
-            return true;
-        }
-    }
-
-    // No tiene
-    return false;
 }
 
 // Algoritmo Wyrnower - Wyrna Power. Con chequeo de colores.
@@ -214,6 +263,40 @@ void print_set(set<T> s){
     cout << endl;
 }
 
+
+// Devuelve el vecino correspondiente a cambiar el color del vertice v por c,
+// recalculando el impacto de forma eficiente.
+//
+// Complejidad temporal: Θ(d_H(v)) = O(m_H) (en el peor caso, pero en la
+// practica no.)
+Vecino nuevoVecino(const Instancia& I, const Solucion& sol, Color c, Vertice v) {
+    // Para calcular el nuevo impacto, tenemos que revisar los vecinos de v en
+    // H. Sera la diferencia entre el impacto del vertice v con el color
+    // original y el nuevo color.
+    int delta = 0;
+    for(Vertice w : I.H[v]) {
+        Color cw = sol.coloreo[w];
+        if (cw == sol.coloreo[v]) {
+            // Si tiene el mismo color que el viejo de v, perdemos impacto
+            delta--;
+        } else if(cw == c) {
+            // Si tiene el mismo color que el que le vamos a asignar,
+            // sumamos 1.
+            delta++;
+        }
+    }
+
+    Coloreo nuevo = sol.coloreo;
+    nuevo[v] = c;
+    return Vecino{
+        .sol = Solucion{
+            .coloreo = nuevo,
+            .impacto = sol.impacto + delta
+        },
+        .estr = CambioEstructural(v, c),
+    };
+}
+
 // Vecinos da la vecindad de una solucion.
 // Cada vecina es generada cambiando el color de un vertice por otro ya usado en
 // el coloreo.
@@ -254,39 +337,6 @@ vector<Vecino> vecinos(const Instancia& I, const Solucion& sol) {
     }
 
     return vecindad;
-}
-
-// Devuelve el vecino correspondiente a cambiar el color del vertice v por c,
-// recalculando el impacto de forma eficiente.
-//
-// Complejidad temporal: Θ(d_H(v)) = O(m_H) (en el peor caso, pero en la
-// practica no.)
-Vecino nuevoVecino(const Instancia& I, const Solucion& sol, Color c, Vertice v) {
-    // Para calcular el nuevo impacto, tenemos que revisar los vecinos de v en
-    // H. Sera la diferencia entre el impacto del vertice v con el color
-    // original y el nuevo color.
-    int delta = 0;
-    for(Vertice w : I.H[v]) {
-        Color cw = sol.coloreo[w];
-        if (cw == sol.coloreo[v]) {
-            // Si tiene el mismo color que el viejo de v, perdemos impacto
-            delta--;
-        } else if(cw == c) {
-            // Si tiene el mismo color que el que le vamos a asignar,
-            // sumamos 1.
-            delta++;
-        }
-    }
-
-    Coloreo nuevo = sol.coloreo;
-    nuevo[v] = c;
-    return Vecino{
-        .sol = Solucion{
-            .coloreo = nuevo,
-            .impacto = sol.impacto + delta
-        },
-        .estr = CambioEstructural(v, c),
-    }
 }
 
 // Dado un vector de vecinos, devuelve los que no son tabu (i.e los que no estan
