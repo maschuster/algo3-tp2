@@ -38,6 +38,8 @@ Un coloreo valido es solucion factible. Te interesa maximizar el impacto
 
 - wyrnistica diferencial: Para cada arista (v,w) en H, si (v, w) no pertenece a G entonces pinto v y w de igual color.
 
+- secuencial simple ordenando por grados
+
 ### Taboh search
 
 taboh sech
@@ -63,6 +65,7 @@ busquedaLocal()
     coloreo invalido.
     - La vecindad de las soluciones tiene <= colores
   - incrementar cantidad de colores
+  - swap
 - Memoria
   - estructura.
     - (vertice, color) {vertice <- color}
@@ -98,14 +101,33 @@ tabuSearch(G: grafo, t: int):
 
 - Impacto en cada iteracion (para ver como evoluciona, si sale de max. locales)
 
-Para visualizar el recorrido del algoritmo (extra: comparar con uno que se quede
+- Para visualizar el recorrido del algoritmo (extra: comparar con uno que se quede
 en locales, como hill climber):
+  - Guardar en cada iteracion el coloreo que fue el maximo junto con el impacto
+  - Calcular una mat. de distancias entre todos los coloreos
+  - Graficarlos en 3d. (magia)
 
-- Guardar en cada iteracion el coloreo que fue el maximo junto con el impacto
-- Calcular una mat. de distancias entre todos los coloreos
-- Graficarlos en 3d. (magia)
+### Metricas
 
-### Exp 1
+Usar gap relativo / absoluto del impacto obtenido con el maximo conocido.
+
+### Ideas random
+
+- Agregar un "reset" a random en tabu search
+- **Vecindad alternativa**: Tabu: solo achicar numero de colores para vecindad te limita, buscar otra forma
+que no lo haga y ver si es mejor
+
+### Exp 1 - Elección de goloso
+
+Encontrar el mejor goloso para usar con tabu search.
+
+Preguntas:
+
+- Mayor impacto en solucion inicial mejora solucion final? O te condiciona mucho
+- Hace diferencia en la eficiencia o el grueso del tiempo se lo lleva tabu?
+
+Hip: El que de mejor impacto va a hacer que funcione mejor tabu search, y no va
+a cambiar el tiempo.
 
 - Probar los dos golosos y la random (control) solos para todos
   - eficiencia
@@ -114,23 +136,30 @@ en locales, como hill climber):
   - ver si se come todo o se nota la diferencia
   - Gap por iteraciones
 
-### Exp 2
+### Exp 2 - Optimizacion de tabu
 
-Optimizar meta-parametros de tabu search
+Optimizar meta-parametros de tabu search con alguna heurística (hill climber)
 
-- Cantidad de vecindad que se considera
+- Tamaño de la vecindad que se considera
 - Iteraciones
 - Tamaño memoria
-- Aspirar
+- Tipo de la memoria
+- Aspirar (estr)
 
-Usar metaheuristicas para establecerlos, por ejemplo hillclimber
+Probar combinaciones arrancando desde algo (justificadamente) razonable.
 
-### Exp 3
+Intuicion / hipotesis
 
-Tabu, solo achicar numero de colores para vecindad te limita, buscar otra forma
-que no lo haga y ver si es mejor.
+- Mas iteraciones van a dar mejores resultados hasta un punto que no cambia
+- Aspirar haria que explore mas para estructural
 
-### Exp 4
+Visualizaciones:
+
+- Evolucion de impacto segun iteracion
+
+### Exp (punto 5) - Nuevas instancias
 
 - Elegir el mejor de cada uno y correrlo para nuevas, comparando eficiencia y
   tiempo de ejecucion.
+
+- Exacto para chiquitas/medianas
