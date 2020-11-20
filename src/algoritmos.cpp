@@ -247,20 +247,46 @@ vector<Vecino> vecinos(const Instancia& I, const Solucion& sol) {
         // print_set(coloresDisponibles);
 
         // Por cada color disponible formamos una solucion
+        // Optimizar
         for (Color c : coloresDisponibles) {
-            Coloreo nuevo = sol.coloreo;
-            nuevo[v] = c;
-            vecindad.push_back(Vecino{
-                .sol = Solucion{
-                    .coloreo = nuevo,
-                    .impacto = calcularImpacto(I, nuevo),
-                },
-                .estr = CambioEstructural(v, c),
-            });
+            vecindad.push_back(nuevoVecino(I, sol, c, v));
         }
     }
 
     return vecindad;
+}
+
+// Devuelve el vecino correspondiente a cambiar el color del vertice v por c,
+// recalculando el impacto de forma eficiente.
+//
+// Complejidad temporal: Θ(d_H(v)) = O(m_H) (en el peor caso, pero en la
+// practica no.)
+Vecino nuevoVecino(const Instancia& I, const Solucion& sol, Color c, Vertice v) {
+    // Para calcular el nuevo impacto, tenemos que revisar los vecinos de v en
+    // H. Sera la diferencia entre el impacto del vertice v con el color
+    // original y el nuevo color.
+    int delta = 0;
+    for(Vertice w : I.H[v]) {
+        Color cw = sol.coloreo[w];
+        if (cw == sol.coloreo[v]) {
+            // Si tiene el mismo color que el viejo de v, perdemos impacto
+            delta--;
+        } else if(cw == c) {
+            // Si tiene el mismo color que el que le vamos a asignar,
+            // sumamos 1.
+            delta++;
+        }
+    }
+
+    Coloreo nuevo = sol.coloreo;
+    nuevo[v] = c;
+    return Vecino{
+        .sol = Solucion{
+            .coloreo = nuevo,
+            .impacto = sol.impacto + delta
+        },
+        .estr = CambioEstructural(v, c),
+    }
 }
 
 // Dado un vector de vecinos, devuelve los que no son tabu (i.e los que no estan
