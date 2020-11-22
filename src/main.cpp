@@ -60,7 +60,7 @@ void printSolucion(const Solucion& s) {
 
 // Dada una instancia y una selección de dos algoritmos (con entrada de memoria e iteraciones opcional) devuelve la
 // solución obtenida.
-Solucion getAlgorithmSolution(const Instancia& I, string algoritmo, string algoritmoInicial = "", int memoria = 100, int iteraciones = 1000) {
+Solucion getAlgorithmSolution(const Instancia& I, string algoritmo, string algoritmoInicial, int memoria, int iteraciones) {
     Solucion s;
     if (algoritmo == "W") {
         s = wyrnisticaDiferencialGolosa(I);
@@ -69,10 +69,10 @@ Solucion getAlgorithmSolution(const Instancia& I, string algoritmo, string algor
     } else if (algoritmo == "WP") {
         s = wyrnowerGolosa(I);
     } else if (algoritmo == "TS-C") {
-        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial);
+        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial, "", memoria, iteraciones);
         s = tabuColoreo(I, memoria, iteraciones, solucionInicial);
     } else if (algoritmo == "TS-E") {
-        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial);
+        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial, "", memoria, iteraciones);
         s = tabuEstructura(I, memoria, iteraciones, solucionInicial);
     } else if (algoritmo == "C") {
         s = pcmiConstructivaControl(I);
@@ -99,11 +99,18 @@ int main (int argc, char** argv) {
     }
 
     string algoritmo = argv[1];
-    string algoritmoGoloso = "";
+    string algoritmoGoloso = "W";
+    int memoria = 10;
+    int iteraciones = 100;
 
-    if (argc == 3) {
-        // Si es un algoritmo de tabu search, leo el algoritmo utilizado para obtener la solución inicial
+    if (argc >= 3) {
+        // Si es un algoritmo de tabu search, leo el algoritmo utilizado
+        // para obtener la solución inicial
         algoritmoGoloso = argv[2];
+        if (argc == 5) {
+            memoria = stoi(argv[3]);
+            iteraciones = stoi(argv[4]);
+        }
     }
 
     if(algorithms.find(algoritmo) == algorithms.end()) {
@@ -119,7 +126,7 @@ int main (int argc, char** argv) {
     auto start = chrono::steady_clock::now();
 
     // Principal
-    Solucion s = getAlgorithmSolution(I, algoritmo, algoritmoGoloso);
+    Solucion s = getAlgorithmSolution(I, algoritmo, algoritmoGoloso, memoria, iteraciones);
 
     auto end = chrono::steady_clock::now();
 	double total_time = chrono::duration<double, milli>(end - start).count();    

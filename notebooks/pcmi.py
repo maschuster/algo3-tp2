@@ -17,9 +17,15 @@ def run(
     Corre el programa para el algoritmo e instancia dadas y devuelve el
     resultado junto con el tiempo de ejecucion.
     """
-        
+    call = f"../build/main {algorithm}"
+    if initialAlgorithm is not None:
+        call += f" {initialAlgorithm}"
+        if it is not None and mem_size is not None:
+            call += f" {mem_size} {it}"
+
+
     result = subprocess.run(
-        f"../build/main {algorithm} {initialAlgorithm} < {instance_path}",
+        f"{call} < {instance_path}",
         shell=True, capture_output=True, text=True, check=True,
     )
     
