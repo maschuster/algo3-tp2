@@ -78,7 +78,7 @@ bool tieneVecinoConColor(Grafo G, Vertice v, Coloreo coloreo, Color c) {
 
 // Le asigna un color diferente a cada vertice, el coloreo trivial.
 Solucion pcmiConstructivaControl(const Instancia& I) {
-    Coloreo coloreo(I.G.size(), 0);
+    Coloreo coloreo(I.G.size(), UNDEFINED);
     for(int i = 1; i < coloreo.size(); i++) {
         coloreo[i] = i;
     }

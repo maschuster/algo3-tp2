@@ -119,6 +119,17 @@ que no lo haga y ver si es mejor
 
 ### Exp 1 - Elección de goloso
 
+#### Parte A
+
+- Probar los dos golosos y la random (control) solos para todos
+  - eficiencia
+  - tiempo
+- Usar con ambas tabu search
+  - ver si se come todo o se nota la diferencia
+  - Gap por iteraciones  
+
+#### Parte B
+
 Encontrar el mejor goloso para usar con tabu search.
 
 Preguntas:
@@ -128,13 +139,6 @@ Preguntas:
 
 Hip: El que de mejor impacto va a hacer que funcione mejor tabu search, y no va
 a cambiar el tiempo.
-
-- Probar los dos golosos y la random (control) solos para todos
-  - eficiencia
-  - tiempo
-- Usar con ambas tabu search
-  - ver si se come todo o se nota la diferencia
-  - Gap por iteraciones
 
 ### Exp 2 - Optimizacion de tabu
 
@@ -157,7 +161,7 @@ Visualizaciones:
 
 - Evolucion de impacto segun iteracion
 
-### Exp (punto 5) - Nuevas instancias
+### Exp 3 (punto 5) - Nuevas instancias
 
 - Elegir el mejor de cada uno y correrlo para nuevas, comparando eficiencia y
   tiempo de ejecucion.
