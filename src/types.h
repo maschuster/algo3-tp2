@@ -31,3 +31,10 @@ struct Solucion {
     Coloreo coloreo;
     int impacto;
 };
+
+struct TabuArgs {
+    int memoria;
+    int iteraciones;
+    int porcentajeVecindad;
+    bool aspirar;
+};

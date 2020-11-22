@@ -61,31 +61,40 @@ void printSolucion(const Solucion& s) {
     cout << endl;
 }
 
+struct Args {
+    string algoritmo;
+    string algoritmoInicial;
+    TabuArgs tabu;
+};
+
 // Dada una instancia y una selección de dos algoritmos (con entrada de memoria e iteraciones opcional) devuelve la
 // solución obtenida.
-Solucion getAlgorithmSolution(const Instancia& I, string algoritmo, string algoritmoInicial, int memoria, int iteraciones) {
+Solucion getAlgorithmSolution(const Instancia& I, Args args) {
     Solucion s;
-    if (algoritmo == "W") {
+    if (args.algoritmo == "W") {
         s = wyrnisticaDiferencialGolosa(I);
-    } else if (algoritmo == "S-LF") {
+    } else if (args.algoritmo == "S-LF") {
         s = golosaSecuencialLF(I);
-    } else if (algoritmo == "WP") {
+    } else if (args.algoritmo == "WP") {
         s = wyrnowerGolosa(I);
-    } else if (algoritmo == "TSC-C") {
-        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial, "", memoria, iteraciones);
-        s = change::tabuColoreo(I, memoria, iteraciones, solucionInicial);
-    } else if (algoritmo == "TSC-E") {
-        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial, "", memoria, iteraciones);
-        s = change::tabuEstructura(I, memoria, iteraciones, solucionInicial);
-    } else if (algoritmo == "TSS-C") {
-        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial, "", memoria, iteraciones);
-        s = swap::tabuColoreo(I, memoria, iteraciones, solucionInicial);
-    } else if (algoritmo == "TSS-E") {
-        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial, "", memoria, iteraciones);
-        s = swap::tabuEstructura(I, memoria, iteraciones, solucionInicial);
-    } else if (algoritmo == "C") {
+    } else if (args.algoritmo == "C") {
         s = pcmiConstructivaControl(I);
-    }
+    } else {
+        string algoritmo = args.algoritmo;
+
+        args.algoritmo = args.algoritmoInicial;
+        Solucion solucionInicial = getAlgorithmSolution(I, args);
+
+        if (algoritmo == "TSC-C") {
+            s = change::tabuColoreo(I, solucionInicial, args.tabu);
+        } else if (algoritmo == "TSC-E") {
+            s = change::tabuEstructura(I, solucionInicial, args.tabu);
+        } else if (algoritmo == "TSS-C") {
+            s = swap::tabuColoreo(I, solucionInicial, args.tabu);
+        } else if (algoritmo == "TSS-E") {
+            s = swap::tabuEstructura(I, solucionInicial, args.tabu);
+        }
+    } 
 
     return s;
 }
@@ -109,23 +118,31 @@ int main (int argc, char** argv) {
         return -1;
     }
 
-    string algoritmo = argv[1];
-    string algoritmoGoloso = "W";
-    int memoria = 10;
-    int iteraciones = 100;
+    Args args = Args {
+        .algoritmo = argv[1],
+        .algoritmoInicial = "W",
+        .tabu = TabuArgs{
+            .memoria = 10,
+            .iteraciones = 100,
+            .porcentajeVecindad = 100,
+            .aspirar = false
+        }
+    };
 
     if (argc >= 3) {
         // Si es un algoritmo de tabu search, leo el algoritmo utilizado
         // para obtener la solución inicial
-        algoritmoGoloso = argv[2];
-        if (argc == 5) {
-            memoria = stoi(argv[3]);
-            iteraciones = stoi(argv[4]);
+        args.algoritmoInicial = argv[2];
+        if (argc == 7) {
+            args.tabu.memoria = stoi(argv[3]);
+            args.tabu.iteraciones = stoi(argv[4]);
+            args.tabu.porcentajeVecindad = stoi(argv[5]);
+            args.tabu.aspirar = (argv[6] == "true");
         }
     }
 
-    if(algorithms.find(algoritmo) == algorithms.end()) {
-        cout << "Algoritmo no encontrado: " << algoritmo << endl;
+    if(algorithms.find(args.algoritmo) == algorithms.end()) {
+        cout << "Algoritmo no encontrado: " << args.algoritmo << endl;
 		cerr << "Los algoritmos existentes son: " << endl;
 		for (auto& alg_desc: algorithms) cerr << "- " << alg_desc.first << "\t" << alg_desc.second << endl;
 		return -1;
@@ -137,7 +154,7 @@ int main (int argc, char** argv) {
     auto start = chrono::steady_clock::now();
 
     // Principal
-    Solucion s = getAlgorithmSolution(I, algoritmo, algoritmoGoloso, memoria, iteraciones);
+    Solucion s = getAlgorithmSolution(I, args);
 
     auto end = chrono::steady_clock::now();
 	double total_time = chrono::duration<double, milli>(end - start).count();    

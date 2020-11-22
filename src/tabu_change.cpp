@@ -58,7 +58,7 @@ namespace change {
     // Vecinos da la vecindad de una solucion.
     // Cada vecina es generada cambiando el color de un vertice por otro ya usado en
     // el coloreo.
-    vector<Vecino> vecinos(const Instancia& I, const Solucion& sol) {
+    vector<Vecino> vecinos(const Instancia& I, const Solucion& sol, int percent) {
         vector<Vecino> vecindad;
 
         set<Color> coloresSol;
@@ -148,21 +148,21 @@ namespace change {
     }
 
     // Tabu search con memoria de estructura
-    Solucion tabuEstructura(const Instancia& I, int memorySize, int iterations, const Solucion& solucionInicial) {
+    Solucion tabuEstructura(const Instancia& I, const Solucion& solucionInicial, TabuArgs args) {
         // Obtenemos la solución inicial a partir de una constructiva golosa
         Solucion sol = solucionInicial;
         Solucion best = sol;
 
         // Inicializamos la memoria de tamaño fijo
-        auto memoria = CircularVector<CambioEstructural>(memorySize);
+        auto memoria = CircularVector<CambioEstructural>(args.memoria);
 
-        for(int i = 0; i < iterations; i++) {
+        for(int i = 0; i < args.iteraciones; i++) {
             // Buscamos las soluciones vecinas y nos quedamos con las que no sean
             // tabu.
             vector<Vecino> vecindad = noTabuEstructura(
-                vecinos(I, sol),
+                vecinos(I, sol, args.porcentajeVecindad),
                 memoria,
-                false,          // Aspiracion
+                args.aspirar,          // Aspiracion
                 best.impacto
             );
 
@@ -191,19 +191,19 @@ namespace change {
     // TODO
 
     // Tabu seach con memoria de coloreos
-    Solucion tabuColoreo(const Instancia& I, int memorySize, int iterations, const Solucion& solucionInicial) {
+    Solucion tabuColoreo(const Instancia& I, const Solucion& solucionInicial, TabuArgs args) {
         // Obtenemos la solución inicial a partir de una constructiva golosa
         // TODO: cambiar con la experimentalmente mejor
         Solucion sol = solucionInicial;
         Solucion best = sol;
 
         // Inicializamos la memoria de tamaño fijo
-        auto memoria = CircularVector<Coloreo>(memorySize);
+        auto memoria = CircularVector<Coloreo>(args.memoria);
 
-        for(int i = 0; i < iterations; i++) {
+        for(int i = 0; i < args.iteraciones; i++) {
             // Buscamos las soluciones vecinas y nos quedamos con las que no sean
             // tabu.
-            vector<Vecino> vecindad = noTabuColoreo(vecinos(I, sol), memoria);
+            vector<Vecino> vecindad = noTabuColoreo(vecinos(I, sol, args.porcentajeVecindad), memoria);
 
             if(vecindad.empty()) {
                 // Si no tenemos vecindad, no hay por donde seguir explorando.

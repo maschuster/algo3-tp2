@@ -102,13 +102,16 @@ class TestNPM(unittest.TestCase):
         for test in tests:
             name = f'{test["algoritmo"]}-{test["instancia"]}'
             with self.subTest(name):
+                getIfExists = lambda d, k: d[k] if k in d else None
                 res, _, _ = pcmi.run(
                     test["algoritmo"],
                     f"../instancias/{test['instancia']}.in",
                     f"../instancias/{test['instancia']}.out",
-                    initialAlgorithm=test["inicial"] if "inicial" in test else None,
-                    mem_size=test["mem"] if "mem" in test else None,
-                    it=test["it"] if "it" in test else None,
+                    initialAlgorithm=getIfExists(test, "inicial"),
+                    mem_size=getIfExists(test, "mem"),
+                    it=getIfExists(test, "it"),
+                    aspirar=getIfExists(test, "aspirar"),
+                    percent=getIfExists(test, "percent"),
                 )
                 impacto, _ = res
                 assert impacto == test["impacto"], f"want: {test['impacto']}, got: {impacto}"

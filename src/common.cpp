@@ -38,3 +38,13 @@ bool tieneVecinoConColor(const Grafo& G, Vertice v, const Coloreo& coloreo, Colo
     // No tiene
     return false;
 }
+
+/*
+auto rng = std::default_random_engine{};
+std::shuffle(std::begin(vecindad), std::end(vecindad), rng);
+
+return vector<Vecino>(
+    vecindad.begin(),
+    vecindad.begin() + round(vecindad.size()*(percent/100))
+);
+*/

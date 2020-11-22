@@ -12,6 +12,9 @@ def run(
         initialAlgorithm: str = None,
         it: int = None,
         mem_size: int = None,
+        percent: int = None,
+        aspirar: bool = None,
+
     ) -> (Result, float):
     """
     Corre el programa para el algoritmo e instancia dadas y devuelve el
@@ -20,15 +23,18 @@ def run(
     call = f"../build/main {algorithm}"
     if initialAlgorithm is not None:
         call += f" {initialAlgorithm}"
-        if it is not None and mem_size is not None:
-            call += f" {mem_size} {it}"
+        if (it is not None
+            and mem_size is not None
+            and percent is not None
+            and aspirar is not None):
 
+            call += f" {mem_size} {it} {percent} {aspirar}"
 
     result = subprocess.run(
         f"{call} < {instance_path}",
         shell=True, capture_output=True, text=True, check=True,
     )
-    
+
     with open(salida, "r") as file:
         optimo = file.read().split("\n")[0]
 

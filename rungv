@@ -2,5 +2,7 @@
 # $1: algoritmo
 # $2: numero (instancia)
 # $3: layout
-build/main $1 W < instancias/CMI_n$2.in
-build/main $1 W < instancias/CMI_n$2.in | src/gv.py view -g instancias/CMI_n$2.in -o instancias/CMI_n$2.out -l $3
+# $4: algoritmo inicial
+# $5: imagen
+build/main $1 $4 < instancias/CMI_n$2.in
+build/main $1 $4 < instancias/CMI_n$2.in | src/gv.py view -g instancias/CMI_n$2.in -o instancias/CMI_n$2.out -l $3 --img $5

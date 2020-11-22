@@ -1,9 +1,10 @@
 #include <set>
 #include <vector>
+#include <random>
+#include <string>
 #include <utility>
 #include <iostream>
 #include <algorithm>
-#include <string>
 
 #include "circular_vector.cpp"
 #include "common.cpp"
@@ -82,7 +83,7 @@ namespace swap {
 
     // Vecinos da la vecindad de una solucion.
     // Cada vecina es generada swapeando colores de dos vertices.
-    vector<Vecino> vecinos(const Instancia& I, const Solucion& sol) {
+    vector<Vecino> vecinos(const Instancia& I, const Solucion& sol, int percent) {
         vector<Vecino> vecindad;
 
         // Para cada par de vertices, vemos si swapear sus colores es factible y lo
@@ -153,20 +154,20 @@ namespace swap {
     }
 
     // Tabu search con memoria de estructura
-    Solucion tabuEstructura(const Instancia& I, int memorySize, int iterations, const Solucion& solucionInicial) {
+    Solucion tabuEstructura(const Instancia& I, const Solucion& solucionInicial, TabuArgs args) {
         Solucion sol = solucionInicial;
         Solucion best = sol;
 
         // Inicializamos la memoria de tamaño fijo
-        auto memoria = CircularVector<Swap>(memorySize);
+        auto memoria = CircularVector<Swap>(args.memoria);
 
-        for(int i = 0; i < iterations; i++) {
+        for(int i = 0; i < args.iteraciones; i++) {
             // Buscamos las soluciones vecinas y nos quedamos con las que no sean
             // tabu.
             vector<Vecino> vecindad = noTabuEstructura(
-                vecinos(I, sol),
+                vecinos(I, sol, args.porcentajeVecindad),
                 memoria,
-                false,          // Aspiracion
+                args.aspirar,          // Aspiracion
                 best.impacto
             );
 
@@ -195,19 +196,19 @@ namespace swap {
     // TODO
 
     // Tabu seach con memoria de coloreos
-    Solucion tabuColoreo(const Instancia& I, int memorySize, int iterations, const Solucion& solucionInicial) {
+    Solucion tabuColoreo(const Instancia& I, const Solucion& solucionInicial, TabuArgs args) {
         // Obtenemos la solución inicial a partir de una constructiva golosa
         // TODO: cambiar con la experimentalmente mejor
         Solucion sol = solucionInicial;
         Solucion best = sol;
 
         // Inicializamos la memoria de tamaño fijo
-        auto memoria = CircularVector<Coloreo>(memorySize);
+        auto memoria = CircularVector<Coloreo>(args.memoria);
 
-        for(int i = 0; i < iterations; i++) {
+        for(int i = 0; i < args.iteraciones; i++) {
             // Buscamos las soluciones vecinas y nos quedamos con las que no sean
             // tabu.
-            vector<Vecino> vecindad = noTabuColoreo(vecinos(I, sol), memoria);
+            vector<Vecino> vecindad = noTabuColoreo(vecinos(I, sol, args.porcentajeVecindad), memoria);
 
             if(vecindad.empty()) {
                 // Si no tenemos vecindad, no hay por donde seguir explorando.
