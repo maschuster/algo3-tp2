@@ -112,7 +112,7 @@ class TestNPM(unittest.TestCase):
         for test in tests:
             name = f'{test["algoritmo"]}-{test["instancia"]}'
             with self.subTest(name):
-                res, _ = pcmi.run(test["algoritmo"], f"../instancias/{test['instancia']}.in")
+                res, _, _ = pcmi.run(test["algoritmo"], f"../instancias/{test['instancia']}.in", f"../instancias/{test['instancia']}.out")
                 impacto, coloreo = res
                 assert impacto == test["impacto"], f"want: {test['impacto']}, got: {impacto}"
                 assert coloreo == test["coloreo"], f"want: {test['coloreo']}, got: {coloreo}"
