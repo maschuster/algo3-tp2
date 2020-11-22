@@ -70,28 +70,28 @@ class TestNPM(unittest.TestCase):
                 "impacto": 7,
             },
 
-            # TS-E
+            # TSC-E
             {
-                "algoritmo": "TS-E",
+                "algoritmo": "TSC-E",
                 "instancia": "CMI_n6",
                 "impacto": 1,
             },
             {
-                "algoritmo": "TS-E",
+                "algoritmo": "TSC-E",
                 "instancia": "CMI_n12",
                 "mem_size": 1,
                 "it": 1000,
                 "impacto": 12,
             },
 
-            # TS-C
+            # TSC-C
             {
-                "algoritmo": "TS-C",
+                "algoritmo": "TSC-C",
                 "instancia": "CMI_n6",
                 "impacto": 1,
             },
             {
-                "algoritmo": "TS-C",
+                "algoritmo": "TSC-C",
                 "instancia": "CMI_n12",
                 "mem_size": 1,
                 "it": 1000,

@@ -5,7 +5,10 @@
 #include <chrono>
 #include <map>
 
-#include "algoritmos.cpp"
+#include "types.h"
+#include "golosos.cpp"
+#include "tabu_change.cpp"
+#include "tabu_swap.cpp"
 
 using namespace std;
 
@@ -68,12 +71,18 @@ Solucion getAlgorithmSolution(const Instancia& I, string algoritmo, string algor
         s = golosaSecuencialLF(I);
     } else if (algoritmo == "WP") {
         s = wyrnowerGolosa(I);
-    } else if (algoritmo == "TS-C") {
+    } else if (algoritmo == "TSC-C") {
         Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial, "", memoria, iteraciones);
-        s = tabuColoreo(I, memoria, iteraciones, solucionInicial);
-    } else if (algoritmo == "TS-E") {
+        s = change::tabuColoreo(I, memoria, iteraciones, solucionInicial);
+    } else if (algoritmo == "TSC-E") {
         Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial, "", memoria, iteraciones);
-        s = tabuEstructura(I, memoria, iteraciones, solucionInicial);
+        s = change::tabuEstructura(I, memoria, iteraciones, solucionInicial);
+    } else if (algoritmo == "TSS-C") {
+        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial, "", memoria, iteraciones);
+        s = swap::tabuColoreo(I, memoria, iteraciones, solucionInicial);
+    } else if (algoritmo == "TSS-E") {
+        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial, "", memoria, iteraciones);
+        s = swap::tabuEstructura(I, memoria, iteraciones, solucionInicial);
     } else if (algoritmo == "C") {
         s = pcmiConstructivaControl(I);
     }
@@ -87,8 +96,10 @@ int main (int argc, char** argv) {
         {"S-LF", "Secuencial LF"},
 		{"W", "Wyrnistica"},
         {"WP", "Wyrnower - Wyrna Power"},
-        {"TS-C", "Tabú search con memoria basada en coloreos"},
-		{"TS-E", "Tabú search con memoria basada en estructura (vértices)"},
+        {"TSC-C", "Tabú search con vecindad change memoria basada en coloreos"},
+		{"TSC-E", "Tabú search con vecindad change memoria basada en estructura (vértices)"},
+        {"TSS-C", "Tabú search con vecindad swap memoria basada en coloreos"},
+		{"TSS-E", "Tabú search con vecindad swap memoria basada en estructura (vértices)"},
 	};
 
     // Leo el argumento que indica el algoritmo. Tiene que haber al menos dos
