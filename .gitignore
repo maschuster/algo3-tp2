@@ -11,3 +11,7 @@ build/
 
 .ipynb_checkpoints/
 .ipynb
+
+# Mac
+.idea/
+instancias/.DS_Store

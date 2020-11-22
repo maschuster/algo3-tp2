@@ -58,6 +58,29 @@ void printSolucion(const Solucion& s) {
     cout << endl;
 }
 
+// Dada una instancia y una selección de dos algoritmos (con entrada de memoria e iteraciones opcional) devuelve la
+// solución obtenida.
+Solucion getAlgorithmSolution(const Instancia& I, string algoritmo, string algoritmoInicial = "", int memoria = 100, int iteraciones = 1000) {
+    Solucion s;
+    if (algoritmo == "W") {
+        s = wyrnisticaDiferencialGolosa(I);
+    } else if (algoritmo == "S-LF") {
+        s = golosaSecuencialLF(I);
+    } else if (algoritmo == "WP") {
+        s = wyrnowerGolosa(I);
+    } else if (algoritmo == "TS-C") {
+        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial);
+        s = tabuColoreo(I, memoria, iteraciones, solucionInicial);
+    } else if (algoritmo == "TS-E") {
+        Solucion solucionInicial = getAlgorithmSolution(I, algoritmoInicial);
+        s = tabuEstructura(I, memoria, iteraciones, solucionInicial);
+    } else if (algoritmo == "C") {
+        s = pcmiConstructivaControl(I);
+    }
+
+    return s;
+}
+
 int main (int argc, char** argv) {
     map<string, string> algorithms = {
         {"C", "Control"},
@@ -75,9 +98,16 @@ int main (int argc, char** argv) {
         return -1;
     }
 
-    string algorithm = argv[1];
-    if(algorithms.find(algorithm) == algorithms.end()) {
-        cout << "Algoritmo no encontrado: " << algorithm << endl;
+    string algoritmo = argv[1];
+    string algoritmoGoloso = "";
+
+    if (argc == 3) {
+        // Si es un algoritmo de tabu search, leo el algoritmo utilizado para obtener la solución inicial
+        algoritmoGoloso = argv[2];
+    }
+
+    if(algorithms.find(algoritmo) == algorithms.end()) {
+        cout << "Algoritmo no encontrado: " << algoritmo << endl;
 		cerr << "Los algoritmos existentes son: " << endl;
 		for (auto& alg_desc: algorithms) cerr << "- " << alg_desc.first << "\t" << alg_desc.second << endl;
 		return -1;
@@ -85,27 +115,11 @@ int main (int argc, char** argv) {
 
     // Leemos el input
     Instancia I = leerGrafos();
-    //printGrafo(I.G);
-    //printGrafo(I.H);
 
     auto start = chrono::steady_clock::now();
 
     // Principal
-    Solucion s;
-    if (algorithm == "W") {
-        s = wyrnisticaDiferencialGolosa(I);
-    } else if (algorithm == "S-LF") {
-        s = golosaSecuencialLF(I);
-    } else if (algorithm == "WP") {
-        s = wyrnowerGolosa(I);
-    } else if (algorithm == "TS-C") {
-        s = tabuColoreo(I, 100, 1000);
-    } else if (algorithm == "TS-E") {
-        // TODO: parametrizar tamaño de memoria e iteraciones
-        s = tabuEstructura(I, 100, 1000);
-    } else if (algorithm == "C") {
-        s = pcmiConstructivaControl(I);
-    }
+    Solucion s = getAlgorithmSolution(I, algoritmo, algoritmoGoloso);
 
     auto end = chrono::steady_clock::now();
 	double total_time = chrono::duration<double, milli>(end - start).count();    

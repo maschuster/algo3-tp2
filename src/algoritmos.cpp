@@ -3,6 +3,7 @@
 #include <utility>
 #include <iostream>
 #include <algorithm>
+#include <string>
 
 #include "circular_vector.cpp"
 
@@ -392,10 +393,9 @@ Vecino mejor(vector<Vecino> vecinos) {
 }
 
 // Tabu search con memoria de estructura
-Solucion tabuEstructura(const Instancia& I, int memorySize, int iterations) {
+Solucion tabuEstructura(const Instancia& I, int memorySize, int iterations, const Solucion& solucionInicial) {
     // Obtenemos la solución inicial a partir de una constructiva golosa
-    // TODO: cambiar con la experimentalmente mejor
-    Solucion sol = wyrnisticaDiferencialGolosa(I);
+    Solucion sol = solucionInicial;
     Solucion best = sol;
 
     // Inicializamos la memoria de tamaño fijo
@@ -436,10 +436,10 @@ Solucion tabuEstructura(const Instancia& I, int memorySize, int iterations) {
 // TODO
 
 // Tabu seach con memoria de coloreos
-Solucion tabuColoreo(const Instancia& I, int memorySize, int iterations) {
+Solucion tabuColoreo(const Instancia& I, int memorySize, int iterations, const Solucion& solucionInicial) {
     // Obtenemos la solución inicial a partir de una constructiva golosa
     // TODO: cambiar con la experimentalmente mejor
-    Solucion sol = wyrnisticaDiferencialGolosa(I);
+    Solucion sol = solucionInicial;
     Solucion best = sol;
 
     // Inicializamos la memoria de tamaño fijo

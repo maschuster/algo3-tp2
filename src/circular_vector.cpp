@@ -11,7 +11,8 @@ public:
     }
 
     void push_back(T& elt) {
-        idx = idx++ % max_size;
+        idx++;
+        idx = idx % max_size;
         vec[idx] = elt;
     }
 
