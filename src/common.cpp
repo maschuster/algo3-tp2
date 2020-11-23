@@ -1,6 +1,7 @@
 // nombre de archivo horrible.
 #pragma once
 #include "types.h"
+#include <random>
 
 // Calcula el impacto de un coloreo sobre una instancia, definido como la
 // cantidad de vertices adyacentes en H que tienen el mismo color en G.
@@ -39,12 +40,17 @@ bool tieneVecinoConColor(const Grafo& G, Vertice v, const Coloreo& coloreo, Colo
     return false;
 }
 
-/*
-auto rng = std::default_random_engine{};
-std::shuffle(std::begin(vecindad), std::end(vecindad), rng);
+// Retorna un vector de tamaño <percent>% del vector original
+// con elementos tomados al azar sin reposición.
+//
+// Complejidad temporal: O(n)
+template<typename T>
+vector<T> subconjuntoAleatorio(vector<T> &vec, int percent) {
+    auto rng = std::default_random_engine{};
+    std::shuffle(std::begin(vec), std::end(vec), rng);
 
-return vector<Vecino>(
-    vecindad.begin(),
-    vecindad.begin() + round(vecindad.size()*(percent/100))
-);
-*/
+    return vector<T>(
+        vec.begin(),
+        vec.begin() + ceil(vec.size()*(percent/100))
+    );
+}
