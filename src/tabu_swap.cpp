@@ -1,6 +1,5 @@
 #include <set>
 #include <vector>
-#include <random>
 #include <string>
 #include <utility>
 #include <iostream>
@@ -98,7 +97,7 @@ namespace swap {
             }
         }
 
-        return vecindad;
+        return subconjuntoAleatorio(vecindad, percent);
     }
 
     // Dado un vector de vecinos, devuelve los que no son tabu (i.e los que no estan
@@ -189,7 +188,7 @@ namespace swap {
             }
         }
 
-        return sol;
+        return best;
     }
 
     // Aspiracion
@@ -228,7 +227,7 @@ namespace swap {
             }
         }
 
-        return sol;
+        return best;
     }
 
 }

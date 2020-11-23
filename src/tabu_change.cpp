@@ -91,8 +91,8 @@ namespace change {
                 vecindad.push_back(nuevoVecino(I, sol, c, v));
             }
         }
-
-        return vecindad;
+        
+        return subconjuntoAleatorio(vecindad, percent);
     }
 
     // Dado un vector de vecinos, devuelve los que no son tabu (i.e los que no estan
@@ -184,7 +184,7 @@ namespace change {
             }
         }
 
-        return sol;
+        return best;
     }
 
     // Aspiracion
@@ -223,7 +223,7 @@ namespace change {
             }
         }
 
-        return sol;
+        return best;
     }
 
 }
