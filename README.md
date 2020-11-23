@@ -167,3 +167,8 @@ Visualizaciones:
   tiempo de ejecucion.
 
 - Exacto para chiquitas/medianas
+
+
+## Optimos
+
+build/main TSC-C W 300 100 35 < instancias/CMI_n30.in

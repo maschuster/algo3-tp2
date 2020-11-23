@@ -51,6 +51,6 @@ vector<T> subconjuntoAleatorio(vector<T> &vec, int percent) {
 
     return vector<T>(
         vec.begin(),
-        vec.begin() + ceil(vec.size()*(percent/100))
+        vec.begin() + ceil(vec.size()*((float) percent/100))
     );
 }

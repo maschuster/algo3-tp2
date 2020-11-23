@@ -133,11 +133,11 @@ int main (int argc, char** argv) {
         // Si es un algoritmo de tabu search, leo el algoritmo utilizado
         // para obtener la solución inicial
         args.algoritmoInicial = argv[2];
-        if (argc == 7) {
+        if (argc == 6) {
             args.tabu.memoria = stoi(argv[3]);
             args.tabu.iteraciones = stoi(argv[4]);
             args.tabu.porcentajeVecindad = stoi(argv[5]);
-            args.tabu.aspirar = (argv[6] == "true");
+            // args.tabu.aspirar = (argv[6] == "true");
         }
     }
 

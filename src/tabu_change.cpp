@@ -92,7 +92,9 @@ namespace change {
             }
         }
         
-        return subconjuntoAleatorio(vecindad, percent);
+        vector<Vecino> vecs = subconjuntoAleatorio(vecindad, percent);
+
+        return vecs;
     }
 
     // Dado un vector de vecinos, devuelve los que no son tabu (i.e los que no estan
