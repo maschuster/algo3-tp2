@@ -132,12 +132,25 @@ int main (int argc, char** argv) {
     if (argc >= 3) {
         // Si es un algoritmo de tabu search, leo el algoritmo utilizado
         // para obtener la solución inicial
-        args.algoritmoInicial = argv[2];
-        if (argc == 6) {
-            args.tabu.memoria = stoi(argv[3]);
-            args.tabu.iteraciones = stoi(argv[4]);
-            args.tabu.porcentajeVecindad = stoi(argv[5]);
-            // args.tabu.aspirar = (argv[6] == "true");
+        // args.algoritmoInicial = argv[2];
+        // if (argc == 7) {
+        //     args.tabu.memoria = stoi(argv[3]);
+        //     args.tabu.iteraciones = stoi(argv[4]);
+        //     args.tabu.porcentajeVecindad = stoi(argv[5]);
+        //     args.tabu.aspirar = (argv[6] == "true");
+        // }
+        for(int i = 2; i < argc; i+=2) {
+            // i   es el arg
+            // i+1 el val
+            std::string arg = argv[i];
+            std::string val = argv[i+1];
+
+            // Como puede ser que c++ no te deje hacer switch en string?
+            if (arg == "-i") args.algoritmoInicial = val;
+            if (arg == "-m") args.tabu.memoria = stoi(val);
+            if (arg == "-n") args.tabu.iteraciones = stoi(val);
+            if (arg == "-p") args.tabu.porcentajeVecindad = stoi(val);
+            if (arg == "-a") args.tabu.aspirar = (val == "true");
         }
     }
 
