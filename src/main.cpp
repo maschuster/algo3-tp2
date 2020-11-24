@@ -61,12 +61,6 @@ void printSolucion(const Solucion& s) {
     cout << endl;
 }
 
-struct Args {
-    string algoritmo;
-    string algoritmoInicial;
-    TabuArgs tabu;
-};
-
 // Dada una instancia y una selección de dos algoritmos (con entrada de memoria e iteraciones opcional) devuelve la
 // solución obtenida.
 Solucion getAlgorithmSolution(const Instancia& I, Args args) {
@@ -125,7 +119,8 @@ int main (int argc, char** argv) {
             .memoria = 10,
             .iteraciones = 100,
             .porcentajeVecindad = 100,
-            .aspirar = false
+            .aspirar = false,
+            .debug = false
         }
     };
 
@@ -151,6 +146,7 @@ int main (int argc, char** argv) {
             if (arg == "-n") args.tabu.iteraciones = stoi(val);
             if (arg == "-p") args.tabu.porcentajeVecindad = stoi(val);
             if (arg == "-a") args.tabu.aspirar = (val == "true");
+            if (arg == "-d") args.tabu.debug = (val == "true");
         }
     }
 

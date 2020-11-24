@@ -37,4 +37,11 @@ struct TabuArgs {
     int iteraciones;
     int porcentajeVecindad;
     bool aspirar;
+    bool debug;
+};
+
+struct Args {
+    string algoritmo;
+    string algoritmoInicial;
+    TabuArgs tabu;
 };

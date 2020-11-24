@@ -154,6 +154,9 @@ namespace swap {
 
     // Tabu search con memoria de estructura
     Solucion tabuEstructura(const Instancia& I, const Solucion& solucionInicial, TabuArgs args) {
+        // Encabezado de debug print
+        if (args.debug) clog << "Impacto,Mejora" << endl;
+
         Solucion sol = solucionInicial;
         Solucion best = sol;
 
@@ -182,6 +185,9 @@ namespace swap {
             // Almacenamos el cambio estructural realizado para asi no repetirlo
             memoria.push_back(vecino.estr);
 
+            // Linea de debug print
+            if (args.debug) clog << sol.impacto << ',' << (best.impacto < sol.impacto) << endl;
+
             // La marcamos como nueva mejor si lo es
             if (best.impacto < sol.impacto) {
                 best = sol;
@@ -196,6 +202,9 @@ namespace swap {
 
     // Tabu seach con memoria de coloreos
     Solucion tabuColoreo(const Instancia& I, const Solucion& solucionInicial, TabuArgs args) {
+        // Encabezado de debug print
+        if (args.debug) clog << "Impacto,Mejora" << endl;
+
         // Obtenemos la solución inicial a partir de una constructiva golosa
         // TODO: cambiar con la experimentalmente mejor
         Solucion sol = solucionInicial;
@@ -220,6 +229,9 @@ namespace swap {
 
             // Almacenamos el coloreo encontrado para no repetirlo
             memoria.push_back(vecino.sol.coloreo);
+
+            // Linea de debug print
+            if (args.debug) clog << sol.impacto << ',' << (best.impacto < sol.impacto) << endl;
 
             // La marcamos como nueva mejor si lo es
             if (best.impacto < sol.impacto) {
