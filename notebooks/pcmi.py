@@ -39,7 +39,7 @@ def run(
     )
 
     with open(salida, "r") as file:
-        optimo = file.read().split("\n")[0]
+        optimo = int(file.read().split("\n")[0])
 
     return _read_output(result.stdout.rstrip()), float(result.stderr), optimo
 
