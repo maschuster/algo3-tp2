@@ -172,3 +172,7 @@ Visualizaciones:
 ## Optimos
 
 build/main TSC-C W 300 100 35 < instancias/CMI_n30.in
+
+### fixear
+
+build/main TSS-E -i S-LF -d true < instancias/CMI_n20.in

@@ -157,6 +157,7 @@ namespace change {
         // Obtenemos la solución inicial a partir de una constructiva golosa
         Solucion sol = solucionInicial;
         Solucion best = sol;
+        if (args.debug) clog << sol.impacto << ',' << (best.impacto < sol.impacto) << endl;
 
         // Inicializamos la memoria de tamaño fijo
         auto memoria = CircularVector<CambioEstructural>(args.memoria);
@@ -207,6 +208,7 @@ namespace change {
         // TODO: cambiar con la experimentalmente mejor
         Solucion sol = solucionInicial;
         Solucion best = sol;
+        if (args.debug) clog << sol.impacto << ',' << (best.impacto < sol.impacto) << endl;
 
         // Inicializamos la memoria de tamaño fijo
         auto memoria = CircularVector<Coloreo>(args.memoria);

@@ -43,7 +43,7 @@ LAYOUTS = {
 @click.option("--color", "-c", type=click.File(mode='r'), default="-") # -: stdin
 @click.option("--layout", "-l", type=click.Choice(LAYOUTS.keys(), case_sensitive=True))
 @click.option("--optimum", "-o", type=click.File(mode='r'))
-@click.option("--img", type=str)
+@click.option("--img", type=str, default="")
 def view(graph, color, layout, optimum, img):
     # graph y color son archivos ya abiertos.
     graph = graph.read().split('\n')
