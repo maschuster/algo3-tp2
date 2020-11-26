@@ -29,10 +29,15 @@ namespace swap {
 
         for (Vertice w : H[v]) {
             Color cw = coloreo[w];
+
+            if (w == toSwap) continue;
+
             if (cw == coloreo[v]) {
                 // Si tiene el mismo color que el viejo de v, perdemos impacto
                 delta--;
-            } else if (cw == c && w != toSwap) {
+            }
+
+            if (cw == c) {
                 // Si tiene el mismo color que el que le vamos a asignar,
                 // sumamos 1.
                 // Si el vertice con el que vamos a intercambiar es vecino,
