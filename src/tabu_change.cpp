@@ -162,7 +162,8 @@ namespace change {
         // Inicializamos la memoria de tamaño fijo
         auto memoria = CircularVector<CambioEstructural>(args.memoria);
 
-        for(int i = 0; i < args.iteraciones; i++) {
+        int i;
+        for(i = 0; i < args.iteraciones; i++) {
             // Buscamos las soluciones vecinas y nos quedamos con las que no sean
             // tabu.
             vector<Vecino> vecindad = noTabuEstructura(
@@ -193,6 +194,8 @@ namespace change {
             }
         }
 
+        clog << "Iteraciones efectivas:" << i << endl;
+
         return best;
     }
 
@@ -213,7 +216,8 @@ namespace change {
         // Inicializamos la memoria de tamaño fijo
         auto memoria = CircularVector<Coloreo>(args.memoria);
 
-        for(int i = 0; i < args.iteraciones; i++) {
+        int i;
+        for(i = 0; i < args.iteraciones; i++) {
             // Buscamos las soluciones vecinas y nos quedamos con las que no sean
             // tabu.
             vector<Vecino> vecindad = noTabuColoreo(vecinos(I, sol, args.porcentajeVecindad), memoria);
@@ -238,6 +242,8 @@ namespace change {
                 best = sol;
             }
         }
+
+        clog << "Iteraciones efectivas:" << i << endl;
 
         return best;
     }

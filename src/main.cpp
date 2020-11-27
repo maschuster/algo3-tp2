@@ -168,7 +168,7 @@ int main (int argc, char** argv) {
     auto end = chrono::steady_clock::now();
 	double total_time = chrono::duration<double, milli>(end - start).count();    
     // Imprimimos el tiempo de ejecucion por stderr
-    clog << total_time << endl;
+    clog << "Tiempo de ejecucion:" << total_time << endl;
 
     // Imprimimos la solucion
     printSolucion(s);

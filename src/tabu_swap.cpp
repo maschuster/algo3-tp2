@@ -170,7 +170,8 @@ namespace swap {
         // Inicializamos la memoria de tamaño fijo
         auto memoria = CircularVector<Swap>(args.memoria);
 
-        for(int i = 0; i < args.iteraciones; i++) {
+        int i;
+        for(i = 0; i < args.iteraciones; i++) {
             // Buscamos las soluciones vecinas y nos quedamos con las que no sean
             // tabu.
             vector<Vecino> vecindad = noTabuEstructura(
@@ -201,6 +202,8 @@ namespace swap {
             }
         }
 
+        clog << "Iteraciones efectivas:" << i << endl;
+
         return best;
     }
 
@@ -221,7 +224,8 @@ namespace swap {
         // Inicializamos la memoria de tamaño fijo
         auto memoria = CircularVector<Coloreo>(args.memoria);
 
-        for(int i = 0; i < args.iteraciones; i++) {
+        int i;
+        for(i = 0; i < args.iteraciones; i++) {
             // Buscamos las soluciones vecinas y nos quedamos con las que no sean
             // tabu.
             vector<Vecino> vecindad = noTabuColoreo(vecinos(I, sol, args.porcentajeVecindad), memoria);
@@ -246,6 +250,8 @@ namespace swap {
                 best = sol;
             }
         }
+
+        clog << "Iteraciones efectivas:" << i << endl;
 
         return best;
     }

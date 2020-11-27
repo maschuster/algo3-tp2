@@ -1,10 +1,12 @@
 import subprocess
+import collections
 
 from datetime import datetime
 from typing import List
 
 Color = int
-Result = (int, List[Color])
+Result = collections.namedtuple('Result', 'impacto coloreo')
+Debug = collections.namedtuple('Result', 'tiempo optimo it_efectivas')
 
 def run(
         algorithm: str,
@@ -16,7 +18,7 @@ def run(
         percent: int = None,
         aspirar: bool = None,
         debug: bool = None,
-    ) -> (Result, float):
+    ) -> (Result, Debug):
     """
     Corre el programa para el algoritmo e instancia dadas y devuelve el
     resultado junto con el tiempo de ejecucion.
@@ -45,19 +47,19 @@ def run(
     with open(salida, "r") as file:
         optimo = int(file.read().split("\n")[0])
     
+    stderr = str(result.stderr).split('\n')
+    it_efectivas = int(stderr[-3].split(":")[1])
+    tiempo = float(stderr[-2].split(":")[1])
+
     if debug:
-        salida      = str(result.stderr).split("\n")
-        iteraciones = salida[:-2]
-        resultado   = float(salida[-2])
-        timestamp   = datetime.now().strftime("%d%m%Y%H%M%S")
+        iteraciones  = stderr[:-3]
+        timestamp    = datetime.now().strftime("%d%m%Y%H%M%S")
         
         with open(f"outputs/{algorithm}-{initialAlgorithm}-{timestamp}.csv", "w") as file:
             file_lines = "\n".join(iteraciones)
             file.write(file_lines)
-    else:
-        resultado = float(result.stderr)
 
-    return _read_output(result.stdout.rstrip()), resultado, optimo
+    return _read_output(result.stdout.rstrip()), Debug(tiempo=tiempo, optimo=optimo, it_efectivas=it_efectivas)
 
 def _read_output(out: str) -> Result:
     """Lee un output del programa, por ej.
@@ -65,7 +67,7 @@ def _read_output(out: str) -> Result:
         4 1 6 1 4 3 
     """
     sout = out.split("\n")
-    return int(sout[0]), list(map(int, sout[1].rstrip().split(" ")))
+    return Result(impacto=int(sout[0]), coloreo=list(map(int, sout[1].rstrip().split(" "))))
 
 def printear():
     print("Hola")
