@@ -43,5 +43,6 @@ struct TabuArgs {
 struct Args {
     string algoritmo;
     string algoritmoInicial;
+    bool quiet; // determina si se printea el coloreo
     TabuArgs tabu;
 };

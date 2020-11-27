@@ -18,6 +18,7 @@ def run(
         percent: int = None,
         aspirar: bool = None,
         debug: bool = None,
+        quiet: bool = None,
     ) -> (Result, Debug):
     """
     Corre el programa para el algoritmo e instancia dadas y devuelve el
@@ -30,6 +31,7 @@ def run(
         "-p": percent,
         "-a": aspirar,
         "-d": debug,
+        "-q": quiet,
     }
 
     call = f"../build/main {algorithm}"
@@ -59,14 +61,18 @@ def run(
             file_lines = "\n".join(iteraciones)
             file.write(file_lines)
 
-    return _read_output(result.stdout.rstrip()), Debug(tiempo=tiempo, optimo=optimo, it_efectivas=it_efectivas)
+    return _read_output(result.stdout.rstrip(), quiet), Debug(tiempo=tiempo, optimo=optimo, it_efectivas=it_efectivas)
 
-def _read_output(out: str) -> Result:
+def _read_output(out: str, quiet: bool) -> Result:
     """Lee un output del programa, por ej.
         1 
         4 1 6 1 4 3 
     """
     sout = out.split("\n")
+    if quiet:
+        # no se printea el coloreo
+        return Result(impacto=int(sout[0]), coloreo=[])
+
     return Result(impacto=int(sout[0]), coloreo=list(map(int, sout[1].rstrip().split(" "))))
 
 def printear():

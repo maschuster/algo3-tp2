@@ -53,11 +53,14 @@ void printGrafo(const Grafo& G) {
 // Imprime la solucion por stdout con formato
 // maximo impacto
 // colores de los vertices
-void printSolucion(const Solucion& s) {
+void printSolucion(const Solucion& s, bool evitarColoreo) {
     cout << s.impacto << endl;
+    if (evitarColoreo) return;
+
     for(int i = 1; i < s.coloreo.size(); i++) {
         cout << s.coloreo[i] << " ";
     }
+
     cout << endl;
 }
 
@@ -115,6 +118,7 @@ int main (int argc, char** argv) {
     Args args = Args {
         .algoritmo = argv[1],
         .algoritmoInicial = "W",
+        .quiet = false,
         .tabu = TabuArgs{
             .memoria = 10,
             .iteraciones = 100,
@@ -125,15 +129,6 @@ int main (int argc, char** argv) {
     };
 
     if (argc >= 3) {
-        // Si es un algoritmo de tabu search, leo el algoritmo utilizado
-        // para obtener la solución inicial
-        // args.algoritmoInicial = argv[2];
-        // if (argc == 7) {
-        //     args.tabu.memoria = stoi(argv[3]);
-        //     args.tabu.iteraciones = stoi(argv[4]);
-        //     args.tabu.porcentajeVecindad = stoi(argv[5]);
-        //     args.tabu.aspirar = (argv[6] == "true");
-        // }
         for(int i = 2; i < argc; i+=2) {
             // i   es el arg
             // i+1 el val
@@ -142,6 +137,7 @@ int main (int argc, char** argv) {
 
             // Como puede ser que c++ no te deje hacer switch en string?
             if (arg == "-i") args.algoritmoInicial = val;
+            if (arg == "-q") args.quiet = (val == "true");
             if (arg == "-m") args.tabu.memoria = stoi(val);
             if (arg == "-n") args.tabu.iteraciones = stoi(val);
             if (arg == "-p") args.tabu.porcentajeVecindad = stoi(val);
@@ -171,7 +167,7 @@ int main (int argc, char** argv) {
     clog << "Tiempo de ejecucion:" << total_time << endl;
 
     // Imprimimos la solucion
-    printSolucion(s);
+    printSolucion(s, args.quiet);
 
     return 0;
 } 
