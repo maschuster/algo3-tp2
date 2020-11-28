@@ -178,3 +178,7 @@ build/main TSC-C W 300 100 35 < instancias/CMI_n30.in
 - Informe
 - Definir rangos
 - Visualizar por iteraciones
+
+## Graficos
+
+- Ver para aspirar true/false si varian las it efectivas
