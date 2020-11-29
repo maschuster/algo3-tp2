@@ -50,7 +50,12 @@ def run(
         optimo = int(file.read().split("\n")[0])
     
     stderr = str(result.stderr).split('\n')
-    it_efectivas = int(stderr[-3].split(":")[1])
+    
+    if initialAlgorithm != None:
+        it_efectivas = int(stderr[-3].split(":")[1])
+    else:
+        it_efectivas = -1
+    
     tiempo = float(stderr[-2].split(":")[1])
 
     if debug:
