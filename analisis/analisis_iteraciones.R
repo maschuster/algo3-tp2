@@ -43,9 +43,10 @@ ggplot(data, aes(x = Iteracion, y = Impacto, group = Aspirar, color = Aspirar, f
   geom_hline(yintercept = 47, linetype = "dashed", alpha = .5) +
   geom_line() +
   geom_point(shape = 21) +
+  annotate("text", y = 48.5, x = -0, label = "Óptimo", size = 3.5) +
   facet_wrap(~Algoritmo, scale = "free_x", ncol = 1) +
   scale_fill_manual(values = c("#FFFFFF", "#000000")) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") 
 
 ggsave("plots/impacto_tiempo.png", width = 8, height = 7)
 
