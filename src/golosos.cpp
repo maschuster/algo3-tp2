@@ -94,7 +94,7 @@ Solucion wyrnisticaDiferencialGolosa(const Instancia& I) {
     // incidencia.
     MatrizAdyacencia MatG = listaAMatDeAdyacencia(I.G);
     for (Vertice v = 1; v < I.H.size(); v++) {
-        for (int i = 1; i < I.H[v].size() && coloreo[v] == UNDEFINED; i++) {
+        for (int i = 0; i < I.H[v].size() && coloreo[v] == UNDEFINED; i++) {
             Vertice w = I.H[v][i];
 
             // Si (v, w) \in G, no pueden tener el mismo color porque no seria
@@ -140,7 +140,7 @@ Solucion wyrnowerGolosa(const Instancia& I) {
     // incidencia.
     MatrizAdyacencia MatG = listaAMatDeAdyacencia(I.G);
     for (Vertice v = 1; v < I.H.size(); v++) {
-        for (int i = 1; i < I.H[v].size() && coloreo[v] == UNDEFINED; i++) {
+        for (int i = 0; i < I.H[v].size() && coloreo[v] == UNDEFINED; i++) {
             Vertice w = I.H[v][i];
             // Si (v, w) \in G, no pueden tener el mismo color porque no seria
             // un coloreo valido
