@@ -4,5 +4,5 @@
 # $3: layout
 # $4: algoritmo inicial
 # $5: imagen
-build/main $1 $4 < instancias/CMI_n$2.in
-build/main $1 $4 < instancias/CMI_n$2.in | src/gv.py view -g instancias/CMI_n$2.in -o instancias/CMI_n$2.out -l $3 --img $5
+build/main $1 $4 < patologicos/$2.in
+build/main $1 $4 < patologicos/$2.in | src/gv.py view -g patologicos/$2.in -o patologicos/$2.out -l $3 --img $5
