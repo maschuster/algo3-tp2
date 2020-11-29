@@ -36,3 +36,20 @@ g2 <- data %>%
 g1 + g2
 
 ggsave("plots/heuristicas_constructivas.png", width = 10, height = 5)
+
+data %>%
+  group_by(Inicial, N) %>%
+  summarize(
+    meanColores = mean(Colores),
+    seColores = sd(Colores)/sqrt(n())
+  ) %>%
+  ggplot(aes(x = N, y = meanColores, color = Inicial, group = Inicial)) +
+  geom_errorbar(aes(ymin = meanColores - seColores, ymax = meanColores + seColores), width = 0.5) +
+  geom_line() +
+  geom_point() +
+  ylab("Cantidad de colores") +
+  xlab("Tamaño de la instancia") +
+  labs(color='Heurística') 
+
+ggsave("plots/heuristicas_constructivas_colores.png", width = 6, height = 5)
+
