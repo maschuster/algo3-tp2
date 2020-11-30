@@ -33,12 +33,12 @@ class TestNPM(unittest.TestCase):
             {
                 "algoritmo": "W",
                 "instancia": "CMI_n8",
-                "impacto": 3,
+                "impacto": 4,
             },
             {
                 "algoritmo": "W",
                 "instancia": "CMI_n10",
-                "impacto": 2,
+                "impacto": 3,
             },
 
             # wyrna P
@@ -55,7 +55,7 @@ class TestNPM(unittest.TestCase):
             {
                 "algoritmo": "WP",
                 "instancia": "CMI_n10",
-                "impacto": 2,
+                "impacto": 3,
             },
 
             # SLF
@@ -81,7 +81,7 @@ class TestNPM(unittest.TestCase):
                 "instancia": "CMI_n12",
                 "mem_size": 1,
                 "it": 1000,
-                "impacto": 12,
+                "impacto": 14,
             },
 
             # TSC-C
@@ -95,7 +95,7 @@ class TestNPM(unittest.TestCase):
                 "instancia": "CMI_n12",
                 "mem_size": 1,
                 "it": 1000,
-                "impacto": 12,
+                "impacto": 16,
             },
         ]
 
@@ -103,7 +103,7 @@ class TestNPM(unittest.TestCase):
             name = f'{test["algoritmo"]}-{test["instancia"]}'
             with self.subTest(name):
                 getIfExists = lambda d, k: d[k] if k in d else None
-                res, _, _ = pcmi.run(
+                res, _ = pcmi.run(
                     test["algoritmo"],
                     f"../instancias/{test['instancia']}.in",
                     f"../instancias/{test['instancia']}.out",
@@ -113,8 +113,7 @@ class TestNPM(unittest.TestCase):
                     aspirar=getIfExists(test, "aspirar"),
                     percent=getIfExists(test, "percent"),
                 )
-                impacto, _ = res
-                assert impacto == test["impacto"], f"want: {test['impacto']}, got: {impacto}"
+                assert res.impacto == test["impacto"], f"want: {test['impacto']}, got: {res.impacto}"
 
 if __name__ == "__main__":
     unittest.main()
