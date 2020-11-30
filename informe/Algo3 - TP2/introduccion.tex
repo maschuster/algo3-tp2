@@ -1,0 +1,67 @@
+\clearpage
+\setcounter{page}{1}
+
+\section{Introducción}
+
+En la vida cotidiana es común tener situaciones donde se deseen asignar, disponer o distribuir elementos según algunas restricciones y/o preferencias. Algunos problemas complejos pueden resolverse con algoritmos de optimización combinatoria. Generalmente, estos algoritmos resuelven instancias de problemas que se consideran difíciles de resolver, explorando el espacio de soluciones (usualmente grande) utilizando algunas heurísticas. Estos algoritmos, además, lo logran reduciendo el tamaño efectivo del espacio ya que exploran el espacio de búsqueda eficientemente.
+
+Un problema conocido de optimización combinatoria es el problema de \textit{coloreo mínimo}, donde se explora el espacio de soluciones válidas (coloreos) y se selecciona aquel que utilice el menor número de colores. En este trabajo, se estudiará un problema alternativo, en el que se desea encontrar un coloreo factible para el grafo $G$ buscando maximizar un función $I$ (impacto) de acuerdo a las relaciones establecidas por otro grafo $H$ que presenta los mismos vértices pero no necesariamente la misma distribución de aristas.
+
+Formalmente, dados dos grafos $G=(V,X_G)$ y $H=(V,X_H)$ definidos sobre el mismo conjunto de vértices $V$ y dado un conjunto de $C$ de colores, se define el impacto $I(c)$ sobre $H$ de un coloreo $c:V\rightarrow C$ de $G$ como el número de aristas $e=(i,j)\in X_H$ tales que $c(i) = c(j)$. Se define entonces el Problema de Coloreo Máximo Impacto (PCMI) como un problema de optimización combinatoria donde se busca maximizar el valor de impacto ($I(c)$) obtenido. Para simplificar, se considera \textit{solución factible} a todo coloreo válido de $G$. Cada coloreo se representa como un arreglo de colores de longitud $n$ donde la posición $i$-ésima corresponde al color del vértice $i$.
+
+A continuación se exhibe un ejemplo con su correspondiente respuesta esperada.
+
+\begin{itemize}
+    \item $n=5$ con los grafos $G$ y $H$ representados en la \cref{fig:example-graph}. Las soluciones factibles son todos los coloreos válidos de $G$, como pueden ser [\textit{rojo, verde, amarillo, azul, violeta}] o [\textit{rojo, rojo, azul, azul, rojo}]. El primero corresponde a un coloreo trivial, asignar colores distintos a cada vértice, y presenta un impacto de $0$ debido a que ningún par de vértices comparte colores. El segundo, es el coloreo óptimo ya que todas las aristas de H que no están en G, es decir todas las que podrían contribuir al impacto sin invalidar el coloreo si unieran dos vértices del mismo color, efectivamente unen dos vértices del mismo color.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[H]{0.45\textwidth}
+        \centering
+        \begin{tikzpicture}[scale = 1, every node/.style={draw,circle}] 
+            \node[] (1) at (0,0) {1};
+            \node[below right= 4mm  and 7mm   of 1] (2) {2};
+            \node[below right= 16mm and 2.5mm of 1] (3) {3};
+            \node[below left=  16mm and 2.5mm of 1] (4) {4};
+            \node[below left=  4mm  and 7mm   of 1] (5) {5};
+            
+            \draw[arista] (1) to (3);
+            \draw[arista] (1) to (4);
+            \draw[arista] (2) to (4);
+            \draw[arista] (2) to (3);
+        \end{tikzpicture} 
+        \caption{Grafo G}
+        \label{fig:graphG}
+    \end{subfigure}
+    \begin{subfigure}[H]{0.45\textwidth}
+        \centering
+        \begin{tikzpicture}[scale = 1,every node/.style={draw,circle}] 
+            \node[] (1) at (0,0) {1};
+            \node[below right= 4mm  and 7mm   of 1] (2) {2};
+            \node[below right= 16mm and 2.5mm of 1] (3) {3};
+            \node[below left=  16mm and 2.5mm of 1] (4) {4};
+            \node[below left=  4mm  and 7mm   of 1] (5) {5};
+            
+            \draw[arista] (1) to (2);
+            \draw[arista] (1) to (5);
+            \draw[arista] (2) to (5);
+            \draw[arista] (3) to (4);
+            \draw[arista] (1) to (4);
+            \draw[arista] (1) to (3);
+            \draw[arista] (2) to (3);
+        \end{tikzpicture}
+        \caption{Grafo H}
+        \label{fig:graphH}
+    \end{subfigure}
+    \caption{Instancia de ejemplo para el problema de PCMI. El grafo $G$ se utiliza para verificar que el coloreo sea válido, establece restricciones entre nodos, mientras que el grafo $H$ establece las relaciones de impacto.}
+    \label{fig:example-graph}
+\end{figure}
+
+Algunas situaciones de la vida cotidiana donde se puede encontrar un problema de PCMI podría ser el caso de distribución de invitados en las distintas mesas en un casamiento, cumpleaños o demás fiestas. Cada invitado se representa con un nodo $v\in V$. Luego, como estamos modelando personas reales, existirán enemistades, peleas o cualquier tipo de restricción que impida o sugiera que no es correcto sentar a dos personas en la misma mesa. Estas restricciones se representarán como una arista en el grafo $G$. Luego, tendremos gente que se desee agrupar preferencialmente por algún criterio, como pueden ser parejas, amigos, familiares directos o grupos etarios. Estas relaciones deseables, pero no restrictivas, se modelan como una arista en el grafo $H$. Luego, las distintas mesas (que pueden considerarse de tamaño infinito para simplificar el problema) se pueden representar a través de los colores. Así, es fácil ver que se puede utilizar una solución al problema de PCMI para encontrar una asignación óptima para las personas en las distintas mesas, dado que el coloreo obtenido permite evitar juntar gente que no quiere reunirse y maximiza la cantidad de personas que se quieren poner juntas.
+
+El objetivo de este trabajo es implementar una solución para PCMI utilizando 3 heurísticas golosas constructivas y 2 metaheurísticas y evaluar la efectividad de cada una para distintas instancias. En primer lugar se utiliza el algoritmo de \textit{heurística secuencial de coloreo con orden largest first} (S-LF) que consiste en colorear secuencialmente los vértices del grafo $G$ comenzando por alguno de grado mayor ($\triangle_G(v)$) y asignando el menor número de color posible. Para el algoritmo de \textit{Wyrnística diferencial} (W) se genera un conjunto de aristas $W$ tales que $e \in W \iff e \in X_H \wedge e \not\in X_G$. Luego, para cada arista en $W$, se colorean sus extremos del mismo color. En caso de que uno de los dos esté ya coloreado, ignora ambos vértices y, al terminar, asigna un color distinto a cada vértice no coloreado. Finalmente, la heurística \textit{Wyrnística power} (WP) consiste en realizar el mismo procedimiento anteriormente descrito, excepto que al intentar colorear el par $(v, w) \in W$, si $w$ ya está coloreado, en vez de saltearlo intenta colorear a $v$ del mismo color, siempre y cuando sea válido.
+
+Para el caso de las metaheurísticas, se utilizan para construir una solución inicial todas las heurísticas golosas descritas anteriormente. Por un lado, para el algoritmo \textit{Tabu Search con Swap} (TSS) se explora la vecindad de una solución intermedia intercambiando el color de dos vértices del grafo, mientras que para el algoritmo \textit{Tabu Search con Change} (TSC), se cambia el color de un vértice por algún color válido presente en el coloreo observado. En ambos casos, se utiliza una memoria o \textit{lista tabú} para almacenar soluciones intermedias ya recorridas. En un caso, se almacena de forma \textit{estructural} (E), definiendo qué vértices se intercambiaron o qué color se le asignó al vértice cambiado. En otro, se almacena directamente el \textit{coloreo} (C) completo de la solución revisada.
+
+En la sección de metodología se introducen y explican los algoritmos y las diferencias entre las distintas técnicas junto con las respectivas demostraciones de correctitud y complejidad. Luego, se exponen los experimentos realizados con sus resultados y la respectiva discusión. Por último, se detallan las conclusiones finales del trabajo.

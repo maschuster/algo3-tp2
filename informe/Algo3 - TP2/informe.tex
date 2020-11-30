@@ -1,0 +1,149 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc} 
+\usepackage[spanish]{babel} 
+\usepackage{caratula}
+
+% Comandos para simbolos matematicos.
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tabularx}
+
+% Uno de estos imports rompe la carátula
+%\usepackage{amsfonts,epsfig,epstopdf,titling,url,array}
+
+% Configuración para usar tikz
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta, shapes.geometric}
+
+% Estilos para dibujar grafos
+\tikzset{arco/.style={line width=0.2mm, -latex}}
+\tikzset{arista/.style={line width=0.2mm}}
+\tikzset{blabel/.style={midway,below,draw=none,fill=none}}
+\tikzset{alabel/.style={midway,above,draw=none,fill=none}}
+\tikzset{rlabel/.style={midway,right,draw=none,fill=none}}
+\tikzset{llabel/.style={midway,left, draw=none,fill=none}}
+
+% Colores
+\definecolor{pastelgreen}{RGB}{145,210,144} % RGB format
+\definecolor{pastelblue}{RGB}{111,183,214}
+\definecolor{pastelred}{HTML}{FF6961}       % Hexadecimal format
+
+% Comandos para referencias
+\usepackage{natbib}
+
+% Comandos para Figuras, Graficos, Tikz etc.
+\usepackage{tikz}
+\usepackage{epsfig}
+\usepackage{pgfplots}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{prettyref,cleveref}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox[cmyk]{0.43, 0.35, 0.35,0.01}{\parbox{\textwidth}{\hspace{15pt}#1#2#3}}}
+
+\usepackage{subcaption}
+\usepackage{svg}
+\setsvg{inkscapeexe=inkscape inscapeopt=-z -D}
+
+% Comandos para algoritmos.
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+\algnewcommand{\IfThenElse}[3]{% \IfThenElse{<if>}{<then>}{<else>}
+\State \algorithmicif\ #1\ \algorithmicthen\ #2\ \algorithmicelse\ #3}
+\algnewcommand{\IfThen}[2]{% \IfThenElse{<if>}{<then>}
+  \State \algorithmicif\ #1\ \algorithmicthen\ #2}
+\pgfplotsset{compat=1.16}
+
+% FORMATO
+
+% Formato de párrafos
+\setlength{\parskip}{0.5em}
+
+% Formato de páginas
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ - #1}}
+
+\fancyhf{}
+
+\fancyhead[LO]{Sección \rightmark} % \thesection\ 
+\fancyfoot[LO]{\small{Cerdeira, Gianatiempo, Panichelli, Schuster}}
+\fancyfoot[RO]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+\setlength{\hoffset}{-0.8in}
+\setlength{\textwidth}{16cm}
+\setlength{\headsep}{0.5cm}
+\setlength{\textheight}{25cm}
+\setlength{\voffset}{-0.7in}
+\setlength{\headwidth}{\textwidth}
+\setlength{\headheight}{13.1pt}
+
+\renewcommand{\baselinestretch}{1.1}  % line spacing
+
+% ******************************************************** %
+
+\begin{document}
+
+\thispagestyle{empty}
+\materia{Algoritmos y Estructura de Datos III}
+\submateria{Segundo Cuatrimestre de 2020}
+\titulo{Trabajo Práctico II}
+\subtitulo{\textit{PCMI}}
+\grupo{Grupo 15}
+
+\integrante{Cerdeira, Elías Nahuel}{692/12}{eliascerdeira@gmail.com}
+\integrante{Gianatiempo, Octavio}{280/10}{ogianatiempo@gmail.com}
+\integrante{Panichelli, Manuel}{72/18}{panicmanu@gmail.com}
+\integrante{Schuster, Martín}{208/18}{m.a.schuster98@gmail.com}
+
+\maketitle
+
+\newpage
+
+\thispagestyle{empty}
+\vfill
+
+% Temas a hablar por seccion
+% 
+% Abstract
+%   - lo de siempre
+% 
+% Introducción
+%  - [DONE] describir el problema de PCMI dando ejs y sols.
+%  - [WIP]  situaciones de la vida real
+% 
+% Desarrollo
+%   - intro teorica de tabu search
+%   - Para cada algoritmo (W, WP, TSC-E/C TSS-E/C)
+%       - Explicar el algoritmo y dar complejidad
+%       - Describir instancias para las cuales no de sols optimas.
+%       - Indicar que tan mala puede ser una solucion obtenida respecto de la optima ???
+%       mas una cuestion intuitiva, entendiendo como anda darnos cuenta en que instancias o flia de instancias podria andar mal
+% 
+% Experimentacion
+%   - exp 1: comparar golosos
+%   - exp 2: optimizar meta-parametros
+%       - ver como son las instancias que tomamos
+%   - exp 3: probar con instancias nuevas
+%
+% Trabajo futuro
+%   - Explorar vecindades menos restrictivas.
+%   - ver las diferencias más finas (w vs wp y E vs C) con un conjunto de instancias más grande. Es más probable que las diferencias en el ranking entre entrenamiento y testeo se deban a particularidades de las instancias que quedaron en cada caso. Por eso podemos distinguir bien entre cambios con alto impacto i.e swap vs change pero se introduce ruido en el ranking para diferencias finas.
+
+\thispagestyle{empty}
+\vspace{3cm}
+\tableofcontents
+\newpage
+
+\input{introduccion}
+\input{desarrollo}
+\input{experimentacion}
+
+\input{conclusiones}
+\input{apendice}
+
+\end{document}
